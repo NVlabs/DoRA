@@ -293,11 +293,9 @@ class DoraModel(torch.nn.Module):
             raise NotImplementedError
 
         elif isinstance(target, torch.nn.Embedding):
-            print("target embed")
             raise NotImplementedError
 
         elif isinstance(target, torch.nn.Conv2d):
-            print("target conv2d")
             raise NotImplementedError
 
         else:
@@ -310,7 +308,6 @@ class DoraModel(torch.nn.Module):
                     )
                     kwargs["fan_in_fan_out"] = lora_config.fan_in_fan_out = False
             elif isinstance(target, Conv1D):
-                # print("target conv1d")
                 raise NotImplementedError
             else:
                 raise ValueError(
@@ -342,7 +339,6 @@ class DoraModel(torch.nn.Module):
         return state_dict
 
     def _find_and_replace(self, adapter_name):
-        print("find and replace")
         lora_config = self.peft_config[adapter_name]
         self._check_quantization_dependency()
         is_target_modules_in_base_model = False
@@ -411,12 +407,10 @@ class DoraModel(torch.nn.Module):
 
 
         if hasattr(old_module, "bias"):
-            # print("replace bias with the trained bias")
             if old_module.bias is not None:
                 new_module.bias = old_module.bias
 
         if getattr(old_module, "state", None) is not None:
-            # print("replace state with the trained state")
             new_module.state = old_module.state
             new_module.to(old_module.weight.device)
 

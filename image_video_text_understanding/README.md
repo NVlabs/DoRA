@@ -1,6 +1,6 @@
 # Finetuning VL-BART on image/video-text understaing tasks using DoRA
 
-This directory includes the DoRA implementation and guidelines for replicating the results outlined in our paper.
+This directory includes the DoRA implementation and guidelines for reproducing the results in our paper.
 We evaluate DoRA in a unified multi-task
 setup on both image-text and video-text benchmarks following the settings of VL-Adapter. For the image-text tasks, we use four diverse V&L datasets: VQAv2, GQA, NLVR2, and MSCOCO image captioning. For video-text tasks, we use TVQA, How2QA, TVC, and YC2C. 
 

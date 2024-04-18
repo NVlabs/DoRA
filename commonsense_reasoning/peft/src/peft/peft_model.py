@@ -90,7 +90,6 @@ class PeftModel(PushToHubMixin, torch.nn.Module):
             elif self.peft_config.peft_type == PeftType.BOTTLENECK:
                 self.base_model = BottleneckModel(peft_config, model)
             elif self.peft_config.peft_type == PeftType.DORA:
-                print("dora model")
                 self.base_model = DoraModel(peft_config, model)
         if getattr(self.peft_config, "modules_to_save", None) is not None:
             self.modules_to_save = self.peft_config.modules_to_save

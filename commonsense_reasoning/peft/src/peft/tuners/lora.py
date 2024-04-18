@@ -324,14 +324,13 @@ class Linear(nn.Linear, LoraLayer):
         nn.Linear.train(self, mode)
         self.lora_A.train(mode)
         self.lora_B.train(mode)
-        print("why not trigured")
+
         if not mode and self.merge_weights and not self.merged:
             # Merge the weights and mark it
             if self.r > 0:
                 self.weight.data += (
                     transpose(self.lora_B.weight @ self.lora_A.weight, self.fan_in_fan_out) * self.scaling
                 )
-                print(f"finished merging the weight")
             self.merged = True
         elif self.merge_weights and self.merged:
             # Make sure that the weights are not merged

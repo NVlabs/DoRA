@@ -416,10 +416,10 @@ class TrainerBase(object):
 
         if self.args.use_dora:
             print("apply dora tuning")
-    
+
             if self.args.lora_settings:
-                wnorm_targets = ["layers"]
-                wnorm_lora_target = ["v_proj", "q_proj"]
+                dora_targets = ["layers"]
+                dora_lora_target = ["v_proj", "q_proj"]
                 it=[(name,m) for name,m in self.model.named_modules()]
                 module_dict={}
                 for n, p in it:
@@ -433,9 +433,9 @@ class TrainerBase(object):
                     else:
                         raise RuntimeError(f"father module {father_name} not found")
                     
-                    if any(t in n for t in wnorm_targets) and isinstance(p,nn.Linear):
-                        if any(t in n for t in wnorm_lora_target):
-                            print(f"{n} wnorm lora target get!!")
+                    if any(t in n for t in dora_targets) and isinstance(p,nn.Linear):
+                        if any(t in n for t in dora_lora_target):
+                            
                             if self.args.dora_simple:
                                 print("apply dora simple instead")
                                 replace_m = DoraLinear_simple(m = p, lora_r= self.args.lora_dim, lora_dropout= 0.0, device=self.model.device)

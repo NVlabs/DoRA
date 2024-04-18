@@ -1,6 +1,6 @@
 # Visual instruction tuning of LLaVA-V1.5 using DoRA
 
-This directory includes the DoRA implementation and guidelines for replicating the results outlined in our paper.
+This directory includes the DoRA implementation and guidelines for reproducing the results in our paper.
 
 ## Setup
 ```Shell
@@ -78,7 +78,7 @@ Example usage for multiple GPUs:
 ```
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash ./Dora_7b.sh
 ```
-### Evaluation
+### Evaluation and DoRA weights
 
 You can directly download the finetuned DoRA weights from [google drive](https://drive.google.com/drive/folders/1NQZTX-axmXZcWpSh5yJrBGjFoJXsw9YE) and evaluate it following the descrption below to reproduce the result of the paper.
 
@@ -86,7 +86,7 @@ Example usage for multiple GPUs:
 ```
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash 7B_eval_dora.sh llava-v1.5-7b-dora-release ABSOLUTE_PATH/visual_instruction_tuning/checkpoints/llava-v1.5-7b-dora-release ABSOLUTE_PATH/LLaVA/playground/data/eval ABSOLUTE_PATH/visual_instruction_tuning/eval_result/llava-v1.5-7b-dora-release ABSOLUTE_PATH/visual_instruction_tuning
 ```
-The first argument denotes the name of the folder where you keep finetuned DoRA weights, the second argument specifies the absolute path to the DoRA weights, the third argument indicates the path to the evaluation datasets, the fourth argument is the path where you want to store the evaluation results, and the last argument is the absolute path to `./visual_instruction_tuning`.
+The first argument denotes the name of the folder where you keep the finetuned DoRA weights, the second argument specifies the absolute path to the DoRA weights, the third argument indicates the path to the evaluation datasets, the fourth argument is the path where you want to store the evaluation results, and the last argument is the absolute path to `./visual_instruction_tuning`.
 
 #### Results that required submission to online server for evaluation
 1. VQAv2: Submit the results to the [evaluation server](https://eval.ai/web/challenges/challenge-page/830/my-submission): `ABSOLUTE_PATH/visual_instruction_tuning/eval_result/llava-v1.5-7b-dora-release/vqav2/answers_upload`.

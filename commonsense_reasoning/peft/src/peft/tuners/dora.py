@@ -187,28 +187,13 @@ class DoraModel(torch.nn.Module):
                     if self.peft_config.enable_lora is None:
                         new_module = Linear8bitLt(target.in_features, target.out_features, bias=bias, **kwargs)
                     else:
-                        print("opps sean does not expect this")
-                        kwargs.update({"enable_lora": self.peft_config.enable_lora})
-                        new_module = MergedLinear8bitLt(target.in_features, target.out_features, bias=bias, **kwargs)
+                        raise NotImplementedError
+                    
                 elif isinstance(target, torch.nn.Linear) and self.peft_config.enable_lora is None:
                     new_module = Linear(target.in_features, target.out_features, bias=bias, **kwargs)
                 elif self.peft_config.enable_lora is not None:
-                    print(self.peft_config.enable_lora )
-                    print("1 opps sean does not expect this")
-                    kwargs.update({"enable_lora": self.peft_config.enable_lora})
-                    if isinstance(target, Conv1D):
-                        in_features, out_features = (
-                            target.weight.ds_shape if hasattr(target.weight, "ds_shape") else target.weight.shape
-                        )
-                    else:
-                        in_features, out_features = target.in_features, target.out_features
-                        if kwargs["fan_in_fan_out"]:
-                            warnings.warn(
-                                "fan_in_fan_out is set to True but the target module is not a Conv1D. "
-                                "Setting fan_in_fan_out to False."
-                            )
-                            kwargs["fan_in_fan_out"] = self.peft_config.fan_in_fan_out = False
-                    new_module = MergedLinear(in_features, out_features, bias=bias, **kwargs)
+                    raise NotImplementedError
+
                 self._replace_module(parent, target_name, new_module, target)
 
             elif wdecompose_target_module_found:
@@ -228,27 +213,12 @@ class DoraModel(torch.nn.Module):
                     if self.peft_config.enable_lora is None:
                         new_module = Linear8bitLt(target.in_features, target.out_features, bias=bias, **kwargs)
                     else:
-                        print("opps sean does not expect this")
-                        kwargs.update({"enable_lora": self.peft_config.enable_lora})
-                        new_module = MergedLinear8bitLt(target.in_features, target.out_features, bias=bias, **kwargs)
+                        raise NotImplementedError
+
                 elif isinstance(target, torch.nn.Linear) and self.peft_config.enable_lora is None:
                     new_module = Linear(target.in_features, target.out_features, bias=bias, Wdecompose= True, **kwargs)
                 elif self.peft_config.enable_lora is not None:
-                    print("opps sean does not expect this")
-                    kwargs.update({"enable_lora": self.peft_config.enable_lora})
-                    if isinstance(target, Conv1D):
-                        in_features, out_features = (
-                            target.weight.ds_shape if hasattr(target.weight, "ds_shape") else target.weight.shape
-                        )
-                    else:
-                        in_features, out_features = target.in_features, target.out_features
-                        if kwargs["fan_in_fan_out"]:
-                            warnings.warn(
-                                "fan_in_fan_out is set to True but the target module is not a Conv1D. "
-                                "Setting fan_in_fan_out to False."
-                            )
-                            kwargs["fan_in_fan_out"] = self.peft_config.fan_in_fan_out = False
-                    new_module = MergedLinear(in_features, out_features, bias=bias, **kwargs)
+                    raise NotImplementedError
                 self._replace_module(parent, target_name, new_module, target)
 
  
@@ -277,7 +247,6 @@ class DoraModel(torch.nn.Module):
         if old_module.bias is not None:
             new_module.bias = old_module.bias
         if getattr(old_module, "state", None) is not None:
-            print("what is this")
             new_module.state = old_module.state
             new_module.to(old_module.weight.device)
 
@@ -385,7 +354,6 @@ class Linear(nn.Linear, LoraLayer):
         nn.Linear.__init__(self, in_features, out_features, **kwargs)
         LoraLayer.__init__(self, r=r, lora_alpha=lora_alpha, lora_dropout=lora_dropout, merge_weights=merge_weights)
 
-        print("init dora layer")
         self.weight_m_wdecomp = nn.Linear(1,out_features,bias=False) # self.weight_m_wdecomp.weight # shape: out_features, 1
 
         self.fan_in_fan_out = fan_in_fan_out
@@ -411,7 +379,6 @@ class Linear(nn.Linear, LoraLayer):
             nn.init.zeros_(self.lora_B.weight)
 
     def train(self, mode: bool = True):
-        # print("I don't understand why this is not triggured with model.train(mode=True) or model.train(mode=False)")
         nn.Linear.train(self, mode)
         if self.Wdecompose == False:
             self.lora_A.train(mode)
@@ -429,7 +396,6 @@ class Linear(nn.Linear, LoraLayer):
                     new_weight_v = self.weight + transpose(self.lora_B.weight @ self.lora_A.weight, fan_in_fan_out=self.fan_in_fan_out) * self.scaling
                     weight = ( self.weight_m_wdecomp.weight / (torch.linalg.norm(new_weight_v,dim=1)).unsqueeze(1)) * new_weight_v
                     self.weight.data.copy_(weight.detach())
-            print("merged the weight")
             self.merged = True
         elif self.merge_weights and self.merged:
             raise NotImplementedError
@@ -446,7 +412,7 @@ class Linear(nn.Linear, LoraLayer):
         previous_dtype = self.weight.dtype
 
         if self.disable_adapters:
-            print("this is never used")
+            raise NotImplementedError
         
         elif self.Wdecompose and not self.merged:
 

@@ -2,7 +2,7 @@
 
 Due to the license issues, we are currently unable to make the code available. Once we have resolved the problem, we will promptly release the code.
 
-This director will includes the DoRA/DVoRA implementation and guidelines for replicating the results outlined in our paper.
+This director will includes the DoRA/DVoRA implementation and guidelines for reproducing the results in our paper.
 
 ## Setup
 1. Install dependencies

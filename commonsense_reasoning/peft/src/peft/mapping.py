@@ -212,7 +212,6 @@ def get_peft_model(model, peft_config):
             peft_config = _prepare_lora_config(peft_config, model_config)
             return PeftModel(model, peft_config)
         elif peft_config.peftype == "DORA":
-            print("dora ???")
             peft_config = _prepare_dora_config(peft_config, model_config)
             return PeftModel(model, peft_config)
         elif peft_config.peft_type == "BOTTLENECK":

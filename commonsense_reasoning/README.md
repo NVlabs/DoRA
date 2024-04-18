@@ -16,7 +16,7 @@ limitations under the License.
 
 # Finetuning LLaMA on commonsense reasoning tasks using DoRA
 
-This directory includes the DoRA implementation and guidelines for replicating the results outlined in our paper.
+This directory includes the DoRA implementation and guidelines for reproducing the results in our paper.
 
 ## Setup
 1. Install dependencies
@@ -65,7 +65,7 @@ An example could be:
 sh 7B_Dora_qkv.sh 32 64 ./finetuned_result/dora_qkv_r32 0
 ```
 
-### Evaluation
+### Evaluation and DoRA weights
 
 You can directly download the finetuned DoRA weights from [google drive](https://drive.google.com/drive/folders/1tFVtNcpfwdCLQTrHpP-1LJiq5jH3reUc?usp=sharing) and evaluate them with `7B_Dora_eval.sh` as describe below to reproduce the result reported in the paper.
 
