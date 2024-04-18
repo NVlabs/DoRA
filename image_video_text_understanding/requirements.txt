@@ -1,0 +1,15 @@
+torch>=1.6.0
+transformers==4.2.1
+sentencepiece
+h5py
+wandb
+tqdm
+numpy
+pandas
+matplotlib
+ftfy
+timm
+pyyaml
+sacrebleu
+git+https://github.com/bckim92/language-evaluation.git
+wget
