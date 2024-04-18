@@ -16,6 +16,8 @@ Shih-Yang Liu, Chien-Yi Wang, Hongxu Yin, Pavlo Molchanov, Yu-Chiang Frank Wang,
 
 Paper: https://arxiv.org/abs/2402.09353
 
+Project page: https://nbasyl.github.io/DoRA-project-page/
+
 DoRA decomposes the pre-trained weight into two components, magnitude and direction, for fine-tuning, specifically employing LoRA for directional updates to efficiently minimize the number of trainable parameters. By employing DoRA, we enhance both
 the learning capacity and training stability of
 LoRA while avoiding any additional inference
@@ -96,8 +98,6 @@ Liu Shih-Yang: [shihyangl@nvidia.com](shihyangl@nvidia.com) or [sliuau@connect.u
 ## Citation
 If you find DoRA useful, please cite it by using the following BibTeX entry.
 ```bibtex
-
-
 @article{liu2024dora,
   title={DoRA: Weight-Decomposed Low-Rank Adaptation},
   author={Liu, Shih-Yang and Wang, Chien-Yi and Yin, Hongxu and Molchanov, Pavlo and Wang, Yu-Chiang Frank and Cheng, Kwang-Ting and Chen, Min-Hung},
