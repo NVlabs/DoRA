@@ -25,7 +25,7 @@ on various downstream tasks, such as commonsense reasoning, visual instruction t
 image/video-text understanding
 
 ## 💥 News 💥
-- **[04.18.2024]** 🔥🔥 We have released source code and the DoRA weight of LLaMA finetuning on commonsense reasoning tasks and LLaVA!
+- **[04.18.2024]** 🔥🔥 We have released source code and the DoRA weight for reproducing the results in our paper!
 - **[03.20.2024]** 🔥🔥 DoRA is now fully supported by the HuggingFace PEFT package and can now support Linear, Conv1d, and Conv2d layers, as well as linear layers quantized with bitsandbytes! 
 
 
@@ -79,7 +79,7 @@ In general, DoRA finetuning on diffusion model is still _experimental_ and is li
 
 ## Reproducing the results in the paper
 
-This repo contain four directories:
+This repo contains four directories:
 
 `./commonsense_reasoning` contains the code to finetune LLaMA-7B/13B using DoRA on the commonsense reasoning tasks. This directory is modified based on [LLM-Adapter](https://github.com/AGI-Edgerunners/LLM-Adapters).
 
