@@ -82,7 +82,7 @@ sh 7B_Dora_eval.sh ./finetuned_result/dora_r32 ./finetuned_result/dora_r32 0
 | LLaMA-7B-LoRA		  |   4   |    2.3 | 46.1 |18.3 |19.7| 55.2| 65.4| 51.9 | 57 | 39.5    |
 | LLaMA-7B-LoRA		  |   8   |   31.3 | 57.0  |  44.0 | 11.8 | 43.3 | 45.7 | 39.2 | 53.8 | 40.7     |
 | LLaMA-7B-LoRA		  |   16  |   69.9 | 77.8 | 75.1 | 72.1 | 55.8 | 77.1 | 62.2 | 78.0 | 70.9    |
-| LLaMA-7B-LoRA		  |   32  |   68.9  |  80.7  |  77.4  |  78.1  |  78.8   |  77.8   |  61.3   |  74.8  |  74.7     |
+| LLaMA-7B-LoRA		  |   32  |   67.5  |  80.8  |  78.2  |  83.4  |  80.4   |  78.0   |  62.6   |  79.1  |  76.3     |
 | LLaMA-7B-LoRA		  |   64  |   66.7 | 79.1 | 75.7 | 17.6 | 78.8 | 73.3 | 59.6 | 75.2 | 65.8    |
 | LLaMA-7B-DoRA 	  |  [4](https://drive.google.com/drive/folders/1JjFg66znyMEJqfcDuDC9joIOJu2biH61?usp=drive_link)    |   51.3 | 42.2 | 77.8 | 25.4 | 78.8 | 78.7 | 62.5 | 78.6 | **61.9**   |
 | LLaMA-7B-DoRA 	  |   [8](https://drive.google.com/drive/folders/1nf4JDSC9KhHUvxEeBfZjb6skZ5kubAIf?usp=drive_link)   |    69.9 | 81.8 | 79.7 | 85.2 | 80.1 | 81.5 | 65.7 | 79.8 | **77.9**   |
