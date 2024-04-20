@@ -84,11 +84,11 @@ sh 7B_Dora_eval.sh ./finetuned_result/dora_r32 ./finetuned_result/dora_r32 0
 | LLaMA-7B-LoRA		  |   16  |   69.9 | 77.8 | 75.1 | 72.1 | 55.8 | 77.1 | 62.2 | 78.0 | 70.9    |
 | LLaMA-7B-LoRA		  |   32  |   68.9  |  80.7  |  77.4  |  78.1  |  78.8   |  77.8   |  61.3   |  74.8  |  74.7     |
 | LLaMA-7B-LoRA		  |   64  |   66.7 | 79.1 | 75.7 | 17.6 | 78.8 | 73.3 | 59.6 | 75.2 | 65.8    |
-| LLaMA-7B-DoRA 	  |  4    |   51.3 | 42.2 | 77.8 | 25.4 | 78.8 | 78.7 | 62.5 | 78.6 | **61.9**   |
-| LLaMA-7B-DoRA 	  |   8   |    69.9 | 81.8 | 79.7 | 85.2 | 80.1 | 81.5 | 65.7 | 79.8 | **77.9**   |
-| LLaMA-7B-DoRA		  |  16   |   70.0 | 82.6 | 79.7 | 83.2 | 80.6 | 80.6 | 65.4 | 77.6 | **77.5**   |
-| LLaMA-7B-DoRA 	  |  32   |   68.5 | 82.9 | 79.6 | 84.8 | 80.8 | 81.4 | 65.8 | 81.0 | **78.1**    |
-| LLaMA-7B-DoRA		  | 64    |   69.9 | 81.4 | 79.1 | 40.7 | 80.0 | 80.9 | 65.5 | 79.4 | **72.1**  |
+| LLaMA-7B-DoRA 	  |  [4](https://drive.google.com/drive/folders/1JjFg66znyMEJqfcDuDC9joIOJu2biH61?usp=drive_link)    |   51.3 | 42.2 | 77.8 | 25.4 | 78.8 | 78.7 | 62.5 | 78.6 | **61.9**   |
+| LLaMA-7B-DoRA 	  |   [8](https://drive.google.com/drive/folders/1nf4JDSC9KhHUvxEeBfZjb6skZ5kubAIf?usp=drive_link)   |    69.9 | 81.8 | 79.7 | 85.2 | 80.1 | 81.5 | 65.7 | 79.8 | **77.9**   |
+| LLaMA-7B-DoRA		  |  [16](https://drive.google.com/drive/folders/1cKCXN168uv1bWkI00d20FvyVeZTMU8Ky?usp=drive_link)   |   70.0 | 82.6 | 79.7 | 83.2 | 80.6 | 80.6 | 65.4 | 77.6 | **77.5**   |
+| LLaMA-7B-DoRA 	  |  [32](https://drive.google.com/drive/folders/1Kz27h5BqNv3NOLdH2UhDf12C2JtwJe0Q?usp=drive_link)   |   69.7 | 83.4 | 78.6 | 87.2 | 81.0 | 81.9 | 66.2 | 79.2 | **78.3**   |
+| LLaMA-7B-DoRA		  |  [64](https://drive.google.com/drive/folders/1ts7TAUYlfHKHngUH4XTQiEFIIuxBJhrD?usp=drive_link)    |   70.1 | 82.0 | 75.6 | 85.9 | 79.7 | 79.1 | 63.7 | 78.4 | **76.8**  |
 
 
 ## Acknowledgement
