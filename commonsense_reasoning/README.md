@@ -49,7 +49,7 @@ Refer to `./commonsense_evaluate.py` for the evaluation of the finetuned model.
 
 ## Finetuning and Evaluation
 
-### Finetuning (`./7B_Dora.sh`)
+### Finetuning (`./llama_7B_Dora.sh`)
 This file contains the code to finetune LLaMA-7B using DoRA. User can specify different DoRA configuration for finetuning. To be specific, the first argument denotes the rank r, the second argument specifies the corresponding alpha, the third argument indicates the destination for saving the fine-tuned model, and the last argument determines the GPU to use.
  
 An example could be:
@@ -57,7 +57,7 @@ An example could be:
 sh 7B_Dora.sh 32 64 ./finetuned_result/dora_r32 0
 ```
 
-### Finetuning (`./7B_Dora_qkv.sh`)
+### Finetuning (`./llama_7B_Dora_qkv.sh`)
 This file contains the code to finetune LLaMA-7B using DoRA but with more customizability, that is user can further specify which modules to only finetune the magnitude component of DoRA by changing `--Wdecompose_target_modules`, please refer to Sec. 5.6 in the paper for more details.
 
 An example could be:
@@ -67,7 +67,7 @@ sh 7B_Dora_qkv.sh 32 64 ./finetuned_result/dora_qkv_r32 0
 
 ### Evaluation and DoRA weights
 
-You can directly download the finetuned DoRA weights from [google drive](https://drive.google.com/drive/folders/1tFVtNcpfwdCLQTrHpP-1LJiq5jH3reUc?usp=sharing) and evaluate them with `7B_Dora_eval.sh` as describe below to reproduce the result reported in the paper.
+You can directly download the finetuned DoRA weights from [google drive](https://drive.google.com/drive/folders/1tFVtNcpfwdCLQTrHpP-1LJiq5jH3reUc?usp=sharing) and evaluate them with `llama_7B_Dora_eval.sh` as describe below to reproduce the result reported in the paper.
 
 This file contains the code to evaluate LLaMA-7B finetuned with DoRA on the eight commonsense reasoning tasks. The first argument is the address of the DoRA weight, the second argument specifies where you would like to save the evaluation result, and the last argument determines which GPU to use.
 
@@ -75,6 +75,15 @@ An example could be:
 ```
 sh 7B_Dora_eval.sh ./finetuned_result/dora_r32 ./finetuned_result/dora_r32 0
 ```
+
+### Finetuning and Evaluating LLaMA2-7B & LLaMA3-8B 
+This file contains the code to finetune LLaMA2-7B/LLaMA3-8B using DoRA. User can specify different DoRA configuration for finetuning. To be specific, the first argument denotes the rank r, the second argument specifies the corresponding alpha, the third argument indicates the destination for saving the fine-tuned model, and the last argument determines the GPU to use.
+An example could be:
+```
+sh llama2_7B_DoRA_r.sh 32 64 ./finetuned_result/r32_lr2e-4 0
+sh llama3_8B_DoRA_r.sh 32 64 ./finetuned_result/r32_lr1e-4 0
+```
+You can also directly download the finetuned DoRA weights from [google drive](https://drive.google.com/drive/folders/1tFVtNcpfwdCLQTrHpP-1LJiq5jH3reUc?usp=sharing) and evaluate them with `llama2_7B_Dora_eval.sh` and `llama3_8B_Dora_eval.sh` to reproduce the result reported in the paper.
 
 ## Accuracy comparison of LoRA and DoRA with varying ranks for LLaMA-7B on the commonsense reasoning tasks
 | Model                 | r | lr |    BoolQ  |  PIQA  |  SIQA  |  HellaSwag  |  WinoGrande  |  ARC-e  |  ARC-c  |  OBQA  |  Average  |
@@ -90,7 +99,18 @@ sh 7B_Dora_eval.sh ./finetuned_result/dora_r32 ./finetuned_result/dora_r32 0
 | LLaMA-7B-DoRA 	  |  [32](https://drive.google.com/drive/folders/1Kz27h5BqNv3NOLdH2UhDf12C2JtwJe0Q?usp=drive_link)   | 1e-4 |   69.7 | 83.4 | 78.6 | 87.2 | 81.0 | 81.9 | 66.2 | 79.2 | **78.4**   |
 | LLaMA-7B-DoRA		  |  [64](https://drive.google.com/drive/folders/1ts7TAUYlfHKHngUH4XTQiEFIIuxBJhrD?usp=drive_link)    | 2e-4 |   70.1 | 82.0 | 75.6 | 85.9 | 79.7 | 79.1 | 63.7 | 78.4 | **76.8**  |
 
-
+## Accuracy comparison of LoRA and DoRA with for LLaMA2-7B on the commonsense reasoning tasks
+| Model                 | r | lr |    BoolQ  |  PIQA  |  SIQA  |  HellaSwag  |  WinoGrande  |  ARC-e  |  ARC-c  |  OBQA  |  Average  |
+|-----------------------|---------|-------|---------|--------|--------|-------------|--------------|---------|---------|--------|-----------|
+| LLaMA2-7B-LoRA		  |   32  |3e-4 |    69.8 | 79.9| 79.5| 83.6| 82.6| 79.8|64.7| 81.0| 77.6    |
+| LLaMA2-7B-DoRA		  |  [16](https://drive.google.com/drive/folders/1lMn7WKLw5aQQqwnFnuDpsM3c9FsQtpl2?usp=drive_link)   | 2e-4 |   72.0 |83.1 |79.9| 89.1 |83.0| 84.5| 71.0 |81.2 |**80.5**  |
+| LLaMA2-7B-DoRA 	  |  [32](https://drive.google.com/drive/folders/1x2qamDlNRgNtBBi-tPrZ3UTYXdObtskE?usp=drive_link)   | 2e-4 |   71.8 |83.7 |76.0 |89.1 |82.6 |83.7 |68.2| 82.4 |**79.7**   |
+## Accuracy comparison of LoRA and DoRA with for LLaMA3-8B on the commonsense reasoning tasks
+| Model                 | r | lr |    BoolQ  |  PIQA  |  SIQA  |  HellaSwag  |  WinoGrande  |  ARC-e  |  ARC-c  |  OBQA  |  Average  |
+|-----------------------|---------|-------|---------|--------|--------|-------------|--------------|---------|---------|--------|-----------|
+| LLaMA3-8B-LoRA		  |   32  |3e-4 |    70.8 |85.2| 79.9| 91.7 |84.3 |84.2| 71.2| 79.0| 80.8    |
+| LLaMA3-8B-DoRA		  |  [16](https://drive.google.com/drive/folders/1WHH_c5sGIdybPZt2Cuk0uEQrKtUOAk5v?usp=drive_link)   | 1e-4 |   74.5 |88.8 |80.3| 95.5| 84.7| 90.1| 79.1| 87.2| **85.0**   |
+| LLaMA3-8B-DoRA 	  |  [32](https://drive.google.com/drive/folders/107-Qjf-odzG7q7uMonLy_ulwzhE5URgb?usp=drive_link)   | 1e-4 |   74.6| 89.3| 79.9 |95.5| 85.6| 90.5| 80.4 |85.8 |**85.2**  |
 ## Acknowledgement
 We greatly appreciate the contributions of two remarkable repositories: [LLM-Adapter](https://github.com/AGI-Edgerunners/LLM-Adapters), [PEFT](https://github.com/huggingface/peft). These projects have significantly benefited our work.
 

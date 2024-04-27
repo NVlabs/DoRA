@@ -156,9 +156,15 @@ def train(
             trust_remote_code=True,
         )
 
+    
     if model.config.model_type == "llama":
         # Due to the name of transformers' LlamaTokenizer, we have to do this
-        tokenizer = LlamaTokenizer.from_pretrained(base_model)
+        # need to handle llama 3 separately
+        if "Llama-3" in base_model:
+            print("load llama-3 tokenizer")
+            tokenizer = AutoTokenizer.from_pretrained(base_model)
+        else:
+            tokenizer = LlamaTokenizer.from_pretrained(base_model)
     else:
         tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
 
