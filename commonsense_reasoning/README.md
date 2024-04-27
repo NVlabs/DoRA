@@ -99,13 +99,13 @@ You can also directly download the finetuned DoRA weights from [google drive](ht
 | LLaMA-7B-DoRA 	  |  [32](https://drive.google.com/drive/folders/1Kz27h5BqNv3NOLdH2UhDf12C2JtwJe0Q?usp=drive_link)   | 1e-4 |   69.7 | 83.4 | 78.6 | 87.2 | 81.0 | 81.9 | 66.2 | 79.2 | **78.4**   |
 | LLaMA-7B-DoRA		  |  [64](https://drive.google.com/drive/folders/1ts7TAUYlfHKHngUH4XTQiEFIIuxBJhrD?usp=drive_link)    | 2e-4 |   70.1 | 82.0 | 75.6 | 85.9 | 79.7 | 79.1 | 63.7 | 78.4 | **76.8**  |
 
-## Accuracy comparison of LoRA and DoRA with for LLaMA2-7B on the commonsense reasoning tasks
+## Accuracy comparison of LoRA and DoRA for LLaMA2-7B on the commonsense reasoning tasks
 | Model                 | r | lr |    BoolQ  |  PIQA  |  SIQA  |  HellaSwag  |  WinoGrande  |  ARC-e  |  ARC-c  |  OBQA  |  Average  |
 |-----------------------|---------|-------|---------|--------|--------|-------------|--------------|---------|---------|--------|-----------|
 | LLaMA2-7B-LoRA		  |   32  |3e-4 |    69.8 | 79.9| 79.5| 83.6| 82.6| 79.8|64.7| 81.0| 77.6    |
 | LLaMA2-7B-DoRA		  |  [16](https://drive.google.com/drive/folders/1lMn7WKLw5aQQqwnFnuDpsM3c9FsQtpl2?usp=drive_link)   | 2e-4 |   72.0 |83.1 |79.9| 89.1 |83.0| 84.5| 71.0 |81.2 |**80.5**  |
 | LLaMA2-7B-DoRA 	  |  [32](https://drive.google.com/drive/folders/1x2qamDlNRgNtBBi-tPrZ3UTYXdObtskE?usp=drive_link)   | 2e-4 |   71.8 |83.7 |76.0 |89.1 |82.6 |83.7 |68.2| 82.4 |**79.7**   |
-## Accuracy comparison of LoRA and DoRA with for LLaMA3-8B on the commonsense reasoning tasks
+## Accuracy comparison of LoRA and DoRA for LLaMA3-8B on the commonsense reasoning tasks
 | Model                 | r | lr |    BoolQ  |  PIQA  |  SIQA  |  HellaSwag  |  WinoGrande  |  ARC-e  |  ARC-c  |  OBQA  |  Average  |
 |-----------------------|---------|-------|---------|--------|--------|-------------|--------------|---------|---------|--------|-----------|
 | LLaMA3-8B-LoRA		  |   32  |3e-4 |    70.8 |85.2| 79.9| 91.7 |84.3 |84.2| 71.2| 79.0| 80.8    |
