@@ -20,6 +20,7 @@ DoRA decomposes the pre-trained weight into two components, magnitude and direct
 
 ## 💥 News 💥
 - **[04.18.2024]** 🔥🔥 We have released the source code and the DoRA weight for reproducing the results in our paper!
+- **[04.18.2024]** 🔥🔥 We have released the source code and the DoRA weight for reproducing the results in our paper!
 - **[03.20.2024]** 🔥🔥 DoRA is now fully supported by the HuggingFace PEFT package and can now support Linear, Conv1d, and Conv2d layers, as well as linear layers quantized with bitsandbytes! 
 
 
