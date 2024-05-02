@@ -1,5 +1,5 @@
 <h1 align="center">
-    <p>DoRA: Weight-Decomposed Low-Rank Adaptation</p>
+    <p>[ICML2024] DoRA: Weight-Decomposed Low-Rank Adaptation</p>
 </h1>
 
 <h1 align="center"> 
@@ -19,6 +19,7 @@ The official pytorch implementation of [DoRA](https://arxiv.org/abs/2402.09353).
 DoRA decomposes the pre-trained weight into two components, magnitude and direction, for fine-tuning, specifically employing LoRA for directional updates to efficiently minimize the number of trainable parameters. By employing DoRA, we enhance both the learning capacity and training stability of LoRA while avoiding any additional inference overhead. DoRA consistently outperforms LoRA on fine-tuning LLaMA, LLaVA, and VL-BART on various downstream tasks, such as commonsense reasoning, visual instruction tuning, and image/video-text understanding.
 
 ## 💥 News 💥
+- **[05.02.2024]** 🔥🔥 DoRA is accepted to [**ICML 2024**](https://icml.cc/Conferences/2024)!! See you in Vienna!!
 - **[04.27.2024]** 🔥🔥 We have added the source code and the DoRA weight for finetuning LLaMA2-7B and LLaMA3-8B on commonsense reasoning tasks!
 - **[04.22.2024]** 🔥🔥 Check out a awesome blog post [FSDP/QDoRA](https://www.answer.ai/posts/2024-04-26-fsdp-qdora-llama3.html) from Answer.ai which shows that QDoRA siginificantly outperforms QLoRA and even edges out full finetuning!
 - **[04.18.2024]** 🔥🔥 We have released the source code and the DoRA weight for reproducing the results in our paper!
