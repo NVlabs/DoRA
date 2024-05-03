@@ -6,11 +6,9 @@
     <img src="./imgs/dora.png" width="600">
 </h1>
 
-The official pytorch implementation of [DoRA](https://arxiv.org/abs/2402.09353).
+The Official PyTorch implementation of [ICML2024] [**DoRA: Weight-Decomposed Low-Rank Adaptation**](https://arxiv.org/abs/2402.09353).
 
 [![Star on GitHub](https://img.shields.io/github/stars/NVlabs/DoRA.svg?style=social)](https://github.com/NVlabs/DoRA/stargazers)
-
-## DoRA: Weight-Decomposed Low-Rank Adaptation
 
 [Shih-Yang Liu](https://nbasyl.github.io/), [Chien-Yi Wang](https://chienyiwang.github.io/), [Hongxu Yin](https://hongxu-yin.github.io/), [Pavlo Molchanov](https://www.pmolchanov.com/), [Yu-Chiang Frank Wang](http://vllab.ee.ntu.edu.tw/ycwang.html), [Kwang-Ting Cheng](https://seng.hkust.edu.hk/about/people/faculty/tim-kwang-ting-cheng), [Min-Hung Chen](https://minhungchen.netlify.app/)
 
@@ -100,24 +98,24 @@ This repo contains four directories:
 `./visual_instruction_tuning` contains the code to finetune LLaVA-1.5-7B on the visual instruction tuning tasks with DoRA. This directory is modified based on [LLaVA](https://github.com/haotian-liu/LLaVA).
 
 
-## Contact
-Shih-Yang Liu: [shihyangl@nvidia.com](shihyangl@nvidia.com) or [sliuau@connect.ust.hk](sliuau@connect.ust.hk)
-
-## Citation
-If you find DoRA useful, please cite it by using the following BibTeX entry.
-```bibtex
-@article{liu2024dora,
-  title={DoRA: Weight-Decomposed Low-Rank Adaptation},
-  author={Liu, Shih-Yang and Wang, Chien-Yi and Yin, Hongxu and Molchanov, Pavlo and Wang, Yu-Chiang Frank and Cheng, Kwang-Ting and Chen, Min-Hung},
-  journal={arXiv preprint arXiv:2402.09353},
-  year={2024}
-}
-```
-
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=NVlabs/DoRA&type=Date)](https://star-history.com/#NVlabs/DoRA&Date)
 
+
+## Contact
+Shih-Yang Liu: [shihyangl@nvidia.com](shihyangl@nvidia.com) or [sliuau@connect.ust.hk](sliuau@connect.ust.hk)
+
+## Citation
+If you find DoRA useful, please consider giving a star and citation:
+```bibtex
+@inproceedings{liu2024dora,
+  title={DoRA: Weight-Decomposed Low-Rank Adaptation},
+  author={Liu, Shih-Yang and Wang, Chien-Yi and Yin, Hongxu and Molchanov, Pavlo and Wang, Yu-Chiang Frank and Cheng, Kwang-Ting and Chen, Min-Hung},
+  booktitle={International Conference on Machine Learning (ICML)},
+  year={2024}
+}
+```
 
 ## Licenses
 Copyright © 2024, NVIDIA Corporation. All rights reserved.
