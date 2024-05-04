@@ -109,10 +109,10 @@ Shih-Yang Liu: [shihyangl@nvidia.com](shihyangl@nvidia.com) or [sliuau@connect.u
 ## Citation
 If you find DoRA useful, please consider giving a star and citation:
 ```bibtex
-@inproceedings{liu2024dora,
+@article{liu2024dora,
   title={DoRA: Weight-Decomposed Low-Rank Adaptation},
   author={Liu, Shih-Yang and Wang, Chien-Yi and Yin, Hongxu and Molchanov, Pavlo and Wang, Yu-Chiang Frank and Cheng, Kwang-Ting and Chen, Min-Hung},
-  booktitle={International Conference on Machine Learning (ICML)},
+  journal={arXiv preprint arXiv:2402.09353},
   year={2024}
 }
 ```
