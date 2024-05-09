@@ -19,7 +19,7 @@ DoRA decomposes the pre-trained weight into two components, magnitude and direct
 ## 💥 News 💥
 - **[05.02.2024]** 🔥🔥 DoRA is accepted to [**ICML 2024**](https://icml.cc/Conferences/2024)!! See you in Vienna!!
 - **[04.27.2024]** 🔥🔥 We have added the source code and the DoRA weight for finetuning LLaMA2-7B and LLaMA3-8B on commonsense reasoning tasks!
-- **[04.22.2024]** 🔥🔥 Check out a awesome blog post [FSDP/QDoRA](https://www.answer.ai/posts/2024-04-26-fsdp-qdora-llama3.html) from Answer.ai which shows that QDoRA siginificantly outperforms QLoRA and even edges out full finetuning!
+- **[04.22.2024]** 🔥🔥 Check out a awesome blog post [FSDP/QDoRA](https://www.answer.ai/posts/2024-04-26-fsdp-qdora-llama3.html) from Answer.ai which shows that QDoRA significantly outperforms QLoRA and even edges out full finetuning!
 - **[04.18.2024]** 🔥🔥 We have released the source code and the DoRA weight for reproducing the results in our paper!
 - **[03.20.2024]** 🔥🔥 DoRA is now fully supported by the HuggingFace PEFT package and can now support Linear, Conv1d, and Conv2d layers, as well as linear layers quantized with bitsandbytes! 
 
