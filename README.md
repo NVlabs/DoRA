@@ -14,19 +14,21 @@ The Official PyTorch implementation of [ICML2024] [**DoRA: Weight-Decomposed Low
 
 [[`Paper`](https://arxiv.org/abs/2402.09353)] [[`Website`](https://nbasyl.github.io/DoRA-project-page/)] [[`BibTeX`](#citation)]
 
-DoRA decomposes the pre-trained weight into two components, magnitude and direction, for fine-tuning, specifically employing LoRA for directional updates to efficiently minimize the number of trainable parameters. By employing DoRA, we enhance both the learning capacity and training stability of LoRA while avoiding any additional inference overhead. DoRA consistently outperforms LoRA on fine-tuning LLaMA, LLaVA, and VL-BART on various downstream tasks, such as commonsense reasoning, visual instruction tuning, and image/video-text understanding.
+DoRA decomposes the pre-trained weight into two components, *magnitude* and *direction*, for fine-tuning, specifically employing LoRA for directional updates to minimize the number of trainable parameters efficiently. By employing DoRA, we enhance both the learning capacity and training stability of LoRA while avoiding any additional inference overhead. DoRA consistently outperforms LoRA on fine-tuning LLaMA, LLaVA, and VL-BART on various downstream tasks, such as commonsense reasoning, visual instruction tuning, and image/video-text understanding.
+
+For business inquiries, please visit our website and submit the form: [NVIDIA Research Licensing](https://www.nvidia.com/en-us/research/inquiries/).
 
 ## 💥 News 💥
 - **[05.02.2024]** 🔥🔥 DoRA is accepted to [**ICML 2024**](https://icml.cc/Conferences/2024)!! See you in Vienna!!
 - **[04.27.2024]** 🔥🔥 We have added the source code and the DoRA weight for finetuning LLaMA2-7B and LLaMA3-8B on commonsense reasoning tasks!
-- **[04.22.2024]** 🔥🔥 Check out a awesome blog post [FSDP/QDoRA](https://www.answer.ai/posts/2024-04-26-fsdp-qdora-llama3.html) from Answer.ai which shows that QDoRA siginificantly outperforms QLoRA and even edges out full finetuning!
+- **[04.22.2024]** 🔥🔥 Check out an awesome blog post [FSDP/QDoRA](https://www.answer.ai/posts/2024-04-26-fsdp-qdora-llama3.html) from Answer.ai which shows that QDoRA significantly outperforms QLoRA and even edges out full finetuning!
 - **[04.18.2024]** 🔥🔥 We have released the source code and the DoRA weight for reproducing the results in our paper!
 - **[03.20.2024]** 🔥🔥 DoRA is now fully supported by the HuggingFace PEFT package and can now support Linear, Conv1d, and Conv2d layers, as well as linear layers quantized with bitsandbytes! 
 
 ## Useful Links
 
 - An amazing tutorial about implementing DoRA from scratch by Sebastian Raschka, see https://magazine.sebastianraschka.com/p/lora-and-dora-from-scratch 
-- An amazing blog post from Answer.AI about QDoRA/FSDP which allow finetuning LLMs on consumer-level GPUs, see https://www.answer.ai/posts/2024-04-26-fsdp-qdora-llama3.html
+- An amazing blog post from Answer.AI about QDoRA/FSDP which allows finetuning LLMs on consumer-level GPUs, see https://www.answer.ai/posts/2024-04-26-fsdp-qdora-llama3.html
 
 ## Quick Start and some tricks regarding finetuning with DoRA
 ### HuggingFace PEFT
