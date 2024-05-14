@@ -54,7 +54,7 @@ This file contains the code to finetune LLaMA-7B using DoRA. User can specify di
  
 An example could be:
 ```
-sh 7B_Dora.sh 32 64 ./finetuned_result/dora_r32 0
+sh llama_7B_Dora.sh 32 64 ./finetuned_result/dora_r32 0
 ```
 
 ### Finetuning (`./llama_7B_Dora_qkv.sh`)
@@ -62,7 +62,7 @@ This file contains the code to finetune LLaMA-7B using DoRA but with more custom
 
 An example could be:
 ```
-sh 7B_Dora_qkv.sh 32 64 ./finetuned_result/dora_qkv_r32 0
+sh llama_7B_Dora_qkv.sh 32 64 ./finetuned_result/dora_qkv_r32 0
 ```
 
 ### Evaluation and DoRA weights
