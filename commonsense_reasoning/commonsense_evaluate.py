@@ -1,11 +1,3 @@
-# Copyright (c) 2024, NVIDIA CORPORATION.  All rights reserved.
-#
-# NVIDIA CORPORATION and its licensors retain all intellectual property
-# and proprietary rights in and to this software, related documentation
-# and any modifications thereto.  Any use, reproduction, disclosure or
-# distribution of this software and related documentation without an express
-# license agreement from NVIDIA CORPORATION is strictly prohibited.
-
 import copy
 import json
 import os
@@ -72,7 +64,8 @@ def main(
             )
         s = generation_output.sequences
         outputs = tokenizer.batch_decode(s, skip_special_tokens=True)
-        outputs = [o.split("### Response:")[1].strip() for o in outputs]
+        print(f"outputs: {outputs}")
+        outputs = [o.split("### Response:")[-1].strip() for o in outputs]
         return outputs
 
     save_file = f'experiment/{args.model}-{args.adapter}-{args.dataset}.json'
@@ -211,7 +204,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', choices=["boolq", "piqa", "social_i_qa", "hellaswag", "winogrande", "ARC-Challenge", "ARC-Easy", "openbookqa"],
                         required=True)
-    parser.add_argument('--model', choices=['LLaMA-7B', "LLaMA-13B",'BLOOM-7B', 'GPT-j-6B'], required=True)
+    parser.add_argument('--model', choices=['LLaMA-7B', "LLaMA-13B",'LLaMA2-7B','LLaMA3-8B'], required=True)
     parser.add_argument('--adapter', choices=['LoRA', 'AdapterP', 'AdapterH', 'Parallel', 'DoRA'],
                         required=True)
     parser.add_argument('--base_model', required=True)
@@ -240,7 +233,10 @@ def load_model(args) -> tuple:
 
     load_8bit = args.load_8bit
     if "LLaMA" in args.model:
-        tokenizer = LlamaTokenizer.from_pretrained(base_model)
+        if "Llama-3" in base_model:
+            tokenizer = AutoTokenizer.from_pretrained(base_model)
+        else:
+            tokenizer = LlamaTokenizer.from_pretrained(base_model)
     else:
         tokenizer = AutoTokenizer.from_pretrained(base_model)
     tokenizer.padding_side = "left"
