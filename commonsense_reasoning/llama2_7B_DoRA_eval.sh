@@ -1,6 +1,6 @@
 
 
-CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
+CUDA_VISIBLE_DEVICES=$3 python commonsense_evaluate.py \
     --model LLaMA2-7B \
     --adapter LoRA \
     --dataset boolq \
@@ -8,7 +8,7 @@ CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
     --batch_size 1 \
     --lora_weights $1|tee -a $1/boolq.txt
 
-CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
+CUDA_VISIBLE_DEVICES=$3 python commonsense_evaluate.py \
     --model LLaMA2-7B \
     --adapter LoRA \
     --dataset piqa \
@@ -16,7 +16,7 @@ CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
     --batch_size 1 \
     --lora_weights $1|tee -a $1/piqa.txt
 
-CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
+CUDA_VISIBLE_DEVICES=$3 python commonsense_evaluate.py \
     --model LLaMA2-7B \
     --adapter LoRA \
     --dataset social_i_qa \
@@ -24,7 +24,7 @@ CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
     --batch_size 1 \
     --lora_weights $1|tee -a $1/social_i_qa.txt
 
-CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
+CUDA_VISIBLE_DEVICES=$3 python commonsense_evaluate.py \
     --model LLaMA2-7B \
     --adapter LoRA \
     --dataset hellaswag \
@@ -32,7 +32,7 @@ CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
     --batch_size 1 \
     --lora_weights $1|tee -a $1/hellaswag.txt
 
-CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
+CUDA_VISIBLE_DEVICES=$3 python commonsense_evaluate.py \
     --model LLaMA2-7B \
     --adapter LoRA \
     --dataset winogrande \
@@ -40,7 +40,7 @@ CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
     --batch_size 1 \
     --lora_weights $1|tee -a $1/winogrande.txt
 
-CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
+CUDA_VISIBLE_DEVICES=$3 python commonsense_evaluate.py \
     --model LLaMA2-7B \
     --adapter LoRA \
     --dataset ARC-Challenge \
@@ -48,7 +48,7 @@ CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
     --batch_size 1 \
     --lora_weights $1|tee -a $1/ARC-Challenge.txt
 
-CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
+CUDA_VISIBLE_DEVICES=$3 python commonsense_evaluate.py \
     --model LLaMA2-7B \
     --adapter LoRA \
     --dataset ARC-Easy \
@@ -56,7 +56,7 @@ CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
     --batch_size 1 \
     --lora_weights $1|tee -a $1/ARC-Easy.txt
 
-CUDA_VISIBLE_DEVICES=$2 python commonsense_evaluate.py \
+CUDA_VISIBLE_DEVICES=$3 python commonsense_evaluate.py \
     --model LLaMA2-7B \
     --adapter LoRA \
     --dataset openbookqa \
