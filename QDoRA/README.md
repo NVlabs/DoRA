@@ -1,6 +1,10 @@
 # QDoRA + FSDP
 Here are the steps to reproduce the results reported in the Efficient finetuning of Llama 3 with [FSDP QDoRA](https://www.answer.ai/posts/2024-04-26-fsdp-qdora-llama3.html) blog post.
 
+<h1 align="center"> 
+    <img src="../imgs/qdora.jpg" width="600">
+</h1>
+
 ## Setup
 ```Shell
 conda create -n qdora python=3.10 -y
