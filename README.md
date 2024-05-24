@@ -19,7 +19,7 @@ DoRA decomposes the pre-trained weight into two components, *magnitude* and *dir
 For business inquiries, please visit our website and submit the form: [NVIDIA Research Licensing](https://www.nvidia.com/en-us/research/inquiries/).
 
 ## 💥 News 💥
-- **[05.24.2024]** 🔥🔥 Add step by step instructions on how to reproduce the QDoRA/FSDP results, see [\QDoRA](https://github.com/NVlabs/DoRA/tree/main/QDoRA)
+- **[05.24.2024]** 🔥🔥 Add step by step instructions on how to reproduce the QDoRA/FSDP results, see [/QDoRA](https://github.com/NVlabs/DoRA/tree/main/QDoRA)
 - **[05.02.2024]** 🔥🔥 DoRA is accepted to [**ICML 2024**](https://icml.cc/Conferences/2024)!! See you in Vienna!!
 - **[04.27.2024]** 🔥🔥 We have added the source code and the DoRA weight for finetuning LLaMA2-7B and LLaMA3-8B on commonsense reasoning tasks!
 - **[04.22.2024]** 🔥🔥 Check out an awesome blog post [FSDP/QDoRA](https://www.answer.ai/posts/2024-04-26-fsdp-qdora-llama3.html) from Answer.ai which shows that QDoRA significantly outperforms QLoRA and even edges out full finetuning!
