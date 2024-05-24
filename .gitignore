@@ -1,6 +1,6 @@
-instruction_tuning/instruct/*
-instruction_tuning/answers/*
-instruction_tuning/peft/*
-instruction_tuning/COPYRIGHT.txt
-instruction_tuning/get_avg_score.py
-instruction_tuning/Software Evaluation License.pdf
+instruction_tuning_dvora/instruct/*
+instruction_tuning_dvora/answers/*
+instruction_tuning_dvora/peft/*
+instruction_tuning_dvora/COPYRIGHT.txt
+instruction_tuning_dvora/get_avg_score.py
+instruction_tuning_dvora/Software Evaluation License.pdf
