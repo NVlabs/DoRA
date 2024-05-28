@@ -73,7 +73,7 @@ This file contains the code to evaluate LLaMA-7B finetuned with DoRA on the eigh
 
 An example could be:
 ```
-sh llama_7B_Dora_eval.sh ./finetuned_result/dora_r32 ./finetuned_result/dora_r32 0
+sh llama_7B_Dora_eval.sh ./finetuned_result/dora_r32 0
 ```
 
 ### Finetuning and Evaluating LLaMA2-7B & LLaMA3-8B 
