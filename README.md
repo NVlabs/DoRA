@@ -6,19 +6,21 @@
     <img src="./imgs/dora.png" width="600">
 </h1>
 
-The Official PyTorch implementation of [ICML2024 (Oral)] [**DoRA: Weight-Decomposed Low-Rank Adaptation**](https://arxiv.org/abs/2402.09353).
+The Official PyTorch implementation of [**DoRA: Weight-Decomposed Low-Rank Adaptation**](https://arxiv.org/abs/2402.09353) [ICML2024 (Oral, acceptance rate: ***1.5%***)].
 
 [![Star on GitHub](https://img.shields.io/github/stars/NVlabs/DoRA.svg?style=social)](https://github.com/NVlabs/DoRA/stargazers)
 
-[Shih-Yang Liu](https://nbasyl.github.io/), [Chien-Yi Wang](https://chienyiwang.github.io/), [Hongxu Yin](https://hongxu-yin.github.io/), [Pavlo Molchanov](https://www.pmolchanov.com/), [Yu-Chiang Frank Wang](http://vllab.ee.ntu.edu.tw/ycwang.html), [Kwang-Ting Cheng](https://seng.hkust.edu.hk/about/people/faculty/tim-kwang-ting-cheng), [Min-Hung Chen](https://minhungchen.netlify.app/)
+[Shih-Yang Liu*](https://nbasyl.github.io/), [Chien-Yi Wang](https://chienyiwang.github.io/), [Hongxu Yin](https://hongxu-yin.github.io/), [Pavlo Molchanov](https://www.pmolchanov.com/), [Yu-Chiang Frank Wang](http://vllab.ee.ntu.edu.tw/ycwang.html), [Kwang-Ting Cheng](https://seng.hkust.edu.hk/about/people/faculty/tim-kwang-ting-cheng), [Min-Hung Chen](https://minhungchen.netlify.app/) <br>
+(*Work done during the internship at NVIDIA Research)
 
-[[`Paper`](https://arxiv.org/abs/2402.09353)] [[`Website`](https://nbasyl.github.io/DoRA-project-page/)] [[`BibTeX`](#citation)]
+[[`Paper`](https://arxiv.org/abs/2402.09353)] [[`Website`](https://nbasyl.github.io/DoRA-project-page/)] [[`NV Blog`](https://developer.nvidia.com/blog/introducing-dora-a-high-performing-alternative-to-lora-for-fine-tuning/)] [[`BibTeX`](#citation)]
 
 DoRA decomposes the pre-trained weight into two components, *magnitude* and *direction*, for fine-tuning, specifically employing LoRA for directional updates to minimize the number of trainable parameters efficiently. By employing DoRA, we enhance both the learning capacity and training stability of LoRA while avoiding any additional inference overhead. DoRA consistently outperforms LoRA on fine-tuning LLaMA, LLaVA, and VL-BART on various downstream tasks, such as commonsense reasoning, visual instruction tuning, and image/video-text understanding.
 
 For business inquiries, please visit our website and submit the form: [NVIDIA Research Licensing](https://www.nvidia.com/en-us/research/inquiries/).
 
 ## 💥 News 💥
+- **[07.02.2024]** 🔥🔥 The official NVIDIA Tech Blog of DoRA is released [HERE](https://developer.nvidia.com/blog/introducing-dora-a-high-performing-alternative-to-lora-for-fine-tuning/)!!
 - **[06.02.2024]** 🔥🔥 DoRA is selected as an ***Oral*** paper in [ICML 2024](https://icml.cc/Conferences/2024)!!
 - **[05.24.2024]** 🔥🔥 Add step-by-step instructions on how to reproduce the QDoRA/FSDP results, see [/QDoRA](https://github.com/NVlabs/DoRA/tree/main/QDoRA)
 - **[05.02.2024]** 🔥🔥 DoRA is accepted to [**ICML 2024**](https://icml.cc/Conferences/2024)!! See you in Vienna!!
