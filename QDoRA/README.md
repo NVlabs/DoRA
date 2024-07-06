@@ -120,14 +120,14 @@ python evaluate.py \
 --model_name meta-llama/Llama-2-7b-hf \
 --models_dir /workspace/quantized-lora-models/ \
 --trained_model_dir fsdp_qlora/models/llama2-7b-orca-math-100k-QDoRA \
---save_path /home/sliuau/fsdp_qlora/eval_results/100k-qdora.json
+--save_path fsdp_qlora/eval_results/100k-qdora.json
 ## QLoRA
 python evaluate.py \
 --eval_type qlora \
 --model_name meta-llama/Llama-2-7b-hf \
 --models_dir /workspace/quantized-lora-models/ \
 --trained_model_dir fsdp_qlora/models/llama2-7b-orca-math-100k-QLoRA \
---save_path /home/sliuau/fsdp_qlora/eval_results/100k-qlora.json
+--save_path fsdp_qlora/eval_results/100k-qlora.json
 ```
 ### LLaMA-3 evaluation scripts (replace --trained_model_dir with the address of your DoRA/LoRA weights)
 ```Shell
@@ -137,12 +137,12 @@ python evaluate.py \
 --model_name meta-llama/Meta-Llama-3-8B \
 --models_dir /workspace/quantized-lora-models/ \
 --trained_model_dir fsdp_qlora/models/llama3-8b-orca-math-100k-QDoRA \
---save_path /home/sliuau/fsdp_qlora/eval_results/100k-qdora.json
+--save_path fsdp_qlora/eval_results/100k-qdora.json
 ## QLoRA
 python evaluate.py \
 --eval_type qlora \
 --model_name meta-llama/Meta-Llama-3-8B \
 --models_dir /workspace/quantized-lora-models/ \
 --trained_model_dir fsdp_qlora/models/llama3-8b-orca-math-100k-QLoRA \
---save_path /home/sliuau/fsdp_qlora/eval_results/100k-qlora.json
+--save_path fsdp_qlora/eval_results/100k-qlora.json
 ```
