@@ -80,7 +80,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash ./Dora_7b.sh
 ```
 ### Evaluation and DoRA weights
 
-You can directly download the finetuned DoRA weights from [google drive](https://drive.google.com/drive/folders/1NQZTX-axmXZcWpSh5yJrBGjFoJXsw9YE) and evaluate it following the descrption below to reproduce the result of the paper.
+You can directly download the finetuned DoRA weights from [HF](https://huggingface.co/sliuau/DoRA-weights/tree/main/llava-v1.5-7b-dora-release) and evaluate it following the descrption below to reproduce the result of the paper.
 
 Example usage for multiple GPUs:
 ```
