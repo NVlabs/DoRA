@@ -67,7 +67,7 @@ sh llama_7B_Dora_qkv.sh 32 64 ./finetuned_result/dora_qkv_r32 0
 
 ### Evaluation and DoRA weights
 
-You can directly download the finetuned DoRA weights from [google drive](https://drive.google.com/drive/folders/1tFVtNcpfwdCLQTrHpP-1LJiq5jH3reUc?usp=sharing) and evaluate them with `llama_7B_Dora_eval.sh` as describe below to reproduce the result reported in the paper.
+You can directly download the finetuned DoRA weights from [HF](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints) and evaluate them with `llama_7B_Dora_eval.sh` as describe below to reproduce the result reported in the paper.
 
 This file contains the code to evaluate LLaMA-7B finetuned with DoRA on the eight commonsense reasoning tasks. The first argument is the address of the DoRA weight, the second argument specifies where you would like to save the evaluation result, and the last argument determines which GPU to use.
 
