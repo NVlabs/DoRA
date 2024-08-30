@@ -83,7 +83,7 @@ An example could be:
 sh llama2_7B_DoRA_r.sh 32 64 ./finetuned_result/r32_lr2e-4 0
 sh llama3_8B_DoRA_r.sh 32 64 ./finetuned_result/r32_lr1e-4 0
 ```
-You can also directly download the finetuned DoRA weights from [google drive](https://drive.google.com/drive/folders/1tFVtNcpfwdCLQTrHpP-1LJiq5jH3reUc?usp=sharing) and evaluate them with `llama2_7B_Dora_eval.sh` and `llama3_8B_Dora_eval.sh` to reproduce the result reported in the paper.
+You can also directly download the finetuned DoRA weights from [HF](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints) and evaluate them with `llama2_7B_Dora_eval.sh` and `llama3_8B_Dora_eval.sh` to reproduce the result reported in the paper.
 
 ## Accuracy comparison of LoRA and DoRA with varying ranks for LLaMA-7B on the commonsense reasoning tasks
 | Model                 | r | lr |    BoolQ  |  PIQA  |  SIQA  |  HellaSwag  |  WinoGrande  |  ARC-e  |  ARC-c  |  OBQA  |  Average  |
@@ -93,24 +93,24 @@ You can also directly download the finetuned DoRA weights from [google drive](ht
 | LLaMA-7B-LoRA		  |   16  | 3e-4 |   69.9 | 77.8 | 75.1 | 72.1 | 55.8 | 77.1 | 62.2 | 78.0 | 70.9    |
 | LLaMA-7B-LoRA		  |   32  |3e-4 |    67.5  |  80.8  |  78.2  |  83.4  |  80.4   |  78.0   |  62.6   |  79.1  |  76.3     |
 | LLaMA-7B-LoRA		  |   64  |3e-4 |    66.7 | 79.1 | 75.7 | 17.6 | 78.8 | 73.3 | 59.6 | 75.2 | 65.8    |
-| LLaMA-7B-DoRA 	  |  [4](https://drive.google.com/drive/folders/1JjFg66znyMEJqfcDuDC9joIOJu2biH61?usp=drive_link)    | 2e-4 |   51.3 | 42.2 | 77.8 | 25.4 | 78.8 | 78.7 | 62.5 | 78.6 | **61.9**   |
-| LLaMA-7B-DoRA 	  |   [8](https://drive.google.com/drive/folders/1nf4JDSC9KhHUvxEeBfZjb6skZ5kubAIf?usp=drive_link)   | 2e-4 |    69.9 | 81.8 | 79.7 | 85.2 | 80.1 | 81.5 | 65.7 | 79.8 | **77.9**   |
-| LLaMA-7B-DoRA		  |  [16](https://drive.google.com/drive/folders/1cKCXN168uv1bWkI00d20FvyVeZTMU8Ky?usp=drive_link)   | 2e-4 |   70.0 | 82.6 | 79.7 | 83.2 | 80.6 | 80.6 | 65.4 | 77.6 | **77.5**   |
-| LLaMA-7B-DoRA 	  |  [32](https://drive.google.com/drive/folders/1Kz27h5BqNv3NOLdH2UhDf12C2JtwJe0Q?usp=drive_link)   | 1e-4 |   69.7 | 83.4 | 78.6 | 87.2 | 81.0 | 81.9 | 66.2 | 79.2 | **78.4**   |
-| LLaMA-7B-DoRA		  |  [64](https://drive.google.com/drive/folders/1ts7TAUYlfHKHngUH4XTQiEFIIuxBJhrD?usp=drive_link)    | 2e-4 |   70.1 | 82.0 | 75.6 | 85.9 | 79.7 | 79.1 | 63.7 | 78.4 | **76.8**  |
+| LLaMA-7B-DoRA 	  |  [4](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama-7B/dora_r4)    | 2e-4 |   51.3 | 42.2 | 77.8 | 25.4 | 78.8 | 78.7 | 62.5 | 78.6 | **61.9**   |
+| LLaMA-7B-DoRA 	  |   [8](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama-7B/dora_r8)   | 2e-4 |    69.9 | 81.8 | 79.7 | 85.2 | 80.1 | 81.5 | 65.7 | 79.8 | **77.9**   |
+| LLaMA-7B-DoRA		  |  [16](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama-7B/dora_r16)   | 2e-4 |   70.0 | 82.6 | 79.7 | 83.2 | 80.6 | 80.6 | 65.4 | 77.6 | **77.5**   |
+| LLaMA-7B-DoRA 	  |  [32](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama-7B/dora_r32)   | 1e-4 |   69.7 | 83.4 | 78.6 | 87.2 | 81.0 | 81.9 | 66.2 | 79.2 | **78.4**   |
+| LLaMA-7B-DoRA		  |  [64](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama-7B/dora_r64)    | 2e-4 |   70.1 | 82.0 | 75.6 | 85.9 | 79.7 | 79.1 | 63.7 | 78.4 | **76.8**  |
 
 ## Accuracy comparison of LoRA and DoRA for LLaMA2-7B on the commonsense reasoning tasks
 | Model                 | r | lr |    BoolQ  |  PIQA  |  SIQA  |  HellaSwag  |  WinoGrande  |  ARC-e  |  ARC-c  |  OBQA  |  Average  |
 |-----------------------|---------|-------|---------|--------|--------|-------------|--------------|---------|---------|--------|-----------|
 | LLaMA2-7B-LoRA		  |   32  |3e-4 |    69.8 | 79.9| 79.5| 83.6| 82.6| 79.8|64.7| 81.0| 77.6    |
-| LLaMA2-7B-DoRA		  |  [16](https://drive.google.com/drive/folders/1lMn7WKLw5aQQqwnFnuDpsM3c9FsQtpl2?usp=drive_link)   | 2e-4 |   72.0 |83.1 |79.9| 89.1 |83.0| 84.5| 71.0 |81.2 |**80.5**  |
-| LLaMA2-7B-DoRA 	  |  [32](https://drive.google.com/drive/folders/1x2qamDlNRgNtBBi-tPrZ3UTYXdObtskE?usp=drive_link)   | 2e-4 |   71.8 |83.7 |76.0 |89.1 |82.6 |83.7 |68.2| 82.4 |**79.7**   |
+| LLaMA2-7B-DoRA		  |  [16](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama2-7B/dora_r16)   | 2e-4 |   72.0 |83.1 |79.9| 89.1 |83.0| 84.5| 71.0 |81.2 |**80.5**  |
+| LLaMA2-7B-DoRA 	  |  [32](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama2-7B/dora_r32)   | 2e-4 |   71.8 |83.7 |76.0 |89.1 |82.6 |83.7 |68.2| 82.4 |**79.7**   |
 ## Accuracy comparison of LoRA and DoRA for LLaMA3-8B on the commonsense reasoning tasks
 | Model                 | r | lr |    BoolQ  |  PIQA  |  SIQA  |  HellaSwag  |  WinoGrande  |  ARC-e  |  ARC-c  |  OBQA  |  Average  |
 |-----------------------|---------|-------|---------|--------|--------|-------------|--------------|---------|---------|--------|-----------|
 | LLaMA3-8B-LoRA		  |   32  |3e-4 |    70.8 |85.2| 79.9| 91.7 |84.3 |84.2| 71.2| 79.0| 80.8    |
-| LLaMA3-8B-DoRA		  |  [16](https://drive.google.com/drive/folders/1WHH_c5sGIdybPZt2Cuk0uEQrKtUOAk5v?usp=drive_link)   | 1e-4 |   74.5 |88.8 |80.3| 95.5| 84.7| 90.1| 79.1| 87.2| **85.0**   |
-| LLaMA3-8B-DoRA 	  |  [32](https://drive.google.com/drive/folders/107-Qjf-odzG7q7uMonLy_ulwzhE5URgb?usp=drive_link)   | 1e-4 |   74.6| 89.3| 79.9 |95.5| 85.6| 90.5| 80.4 |85.8 |**85.2**  |
+| LLaMA3-8B-DoRA		  |  [16](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama3-8B/dora_r16)   | 1e-4 |   74.5 |88.8 |80.3| 95.5| 84.7| 90.1| 79.1| 87.2| **85.0**   |
+| LLaMA3-8B-DoRA 	  |  [32](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama3-8B/dora_r32)   | 1e-4 |   74.6| 89.3| 79.9 |95.5| 85.6| 90.5| 80.4 |85.8 |**85.2**  |
 ## Acknowledgement
 We greatly appreciate the contributions of two remarkable repositories: [LLM-Adapter](https://github.com/AGI-Edgerunners/LLM-Adapters), [PEFT](https://github.com/huggingface/peft). These projects have significantly benefited our work.
 
