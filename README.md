@@ -99,14 +99,14 @@ This repo contains four directories:
 | Model                 | r |    BoolQ  |  PIQA  |  SIQA  |  HellaS  |  WinoG  |  ARC-e  |  ARC-c  |  OBQA  |  Average  |
 |-----------------------|-------|---------|--------|--------|-------------|--------------|---------|---------|--------|-----------|
 | LLaMA-7B-LoRA		  |   32  |    67.5  |  80.8  |  78.2  |  83.4  |  80.4   |  78.0   |  62.6   |  79.1  |  76.3     |
-| LLaMA-7B-DoRA(ours)	  |  [16](https://drive.google.com/drive/folders/1cKCXN168uv1bWkI00d20FvyVeZTMU8Ky?usp=drive_link)   |    70.0 | 82.6 | 79.7 | 83.2 | 80.6 | 80.6 | 65.4 | 77.6 | **77.5**   |
-| LLaMA-7B-DoRA(ours) 	  |  [32](https://drive.google.com/drive/folders/1Kz27h5BqNv3NOLdH2UhDf12C2JtwJe0Q?usp=drive_link)   |   69.7 | 83.4 | 78.6 | 87.2 | 81.0 | 81.9 | 66.2 | 79.2 | **78.4**   |
+| LLaMA-7B-DoRA(ours)	  |  [16](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama-7B/dora_r16)   |    70.0 | 82.6 | 79.7 | 83.2 | 80.6 | 80.6 | 65.4 | 77.6 | **77.5**   |
+| LLaMA-7B-DoRA(ours) 	  |  [32](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama-7B/dora_r32)   |   69.7 | 83.4 | 78.6 | 87.2 | 81.0 | 81.9 | 66.2 | 79.2 | **78.4**   |
 | LLaMA2-7B-LoRA		  |   32  |   69.8 | 79.9| 79.5| 83.6| 82.6| 79.8|64.7| 81.0| 77.6    |
-| LLaMA2-7B-DoRA(ours)		  |  [16](https://drive.google.com/drive/folders/1lMn7WKLw5aQQqwnFnuDpsM3c9FsQtpl2?usp=drive_link)   |   72.0 |83.1 |79.9| 89.1 |83.0| 84.5| 71.0 |81.2 |**80.5**  |
-| LLaMA2-7B-DoRA(ours) 	  |  [32](https://drive.google.com/drive/folders/1x2qamDlNRgNtBBi-tPrZ3UTYXdObtskE?usp=drive_link)   |  71.8 |83.7 |76.0 |89.1 |82.6 |83.7 |68.2| 82.4 |**79.7**   |
+| LLaMA2-7B-DoRA(ours)		  |  [16](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama2-7B/dora_r16)   |   72.0 |83.1 |79.9| 89.1 |83.0| 84.5| 71.0 |81.2 |**80.5**  |
+| LLaMA2-7B-DoRA(ours) 	  |  [32](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama2-7B/dora_r32)   |  71.8 |83.7 |76.0 |89.1 |82.6 |83.7 |68.2| 82.4 |**79.7**   |
 | LLaMA3-8B-LoRA		  |   32  |   70.8 |85.2| 79.9| 91.7 |84.3 |84.2| 71.2| 79.0| 80.8    |
-| LLaMA3-8B-DoRA(ours)		  |  [16](https://drive.google.com/drive/folders/1WHH_c5sGIdybPZt2Cuk0uEQrKtUOAk5v?usp=drive_link)   |  74.5 |88.8 |80.3| 95.5| 84.7| 90.1| 79.1| 87.2| **85.0**   |
-| LLaMA3-8B-DoRA(ours) 	  |  [32](https://drive.google.com/drive/folders/107-Qjf-odzG7q7uMonLy_ulwzhE5URgb?usp=drive_link)   |   74.6| 89.3| 79.9 |95.5| 85.6| 90.5| 80.4 |85.8 |**85.2**  |
+| LLaMA3-8B-DoRA(ours)		  |  [16](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama3-8B/dora_r16)   |  74.5 |88.8 |80.3| 95.5| 84.7| 90.1| 79.1| 87.2| **85.0**   |
+| LLaMA3-8B-DoRA(ours) 	  |  [32](https://huggingface.co/sliuau/DoRA-weights/tree/main/llama_dora_commonsense_checkpoints/LLama3-8B/dora_r32)   |   74.6| 89.3| 79.9 |95.5| 85.6| 90.5| 80.4 |85.8 |**85.2**  |
 
 ## Star History
 
