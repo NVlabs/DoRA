@@ -59,9 +59,9 @@ _use_apex = False
 
 # Check if Pytorch version >= 1.6 to switch between Native AMP and Apex
 if version.parse(torch.__version__) < version.parse("1.6"):
-    from transormers.file_utils import is_apex_available
+    from transormers.file_utils import is_apex_available # type: ignore
     if is_apex_available():
-        from apex import amp
+        from apex import amp # type: ignore
     _use_apex = True
 else:
     _use_native_amp = True
