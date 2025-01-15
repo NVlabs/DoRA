@@ -6,7 +6,7 @@
 # distribution of this software and related documentation without an express
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=0,1
 task=multitask
 
 # or bart
@@ -40,7 +40,7 @@ run_name=tune+lr${lr}_plzplz2
 output=snap/${folder_prefix}_${task}/$run_name
 
 TOKENIZERS_PARALLELISM=True PYTHONPATH=$PYTHONPATH:./src \
-python -m torch.distributed.launch \
+torchrun \
     --nproc_per_node=$1 \
     --master_port=26464 \
     src/${task}.py \

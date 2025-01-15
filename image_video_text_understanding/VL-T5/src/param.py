@@ -7,6 +7,7 @@
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 
 import argparse
+import os
 import random
 
 import numpy as np
@@ -287,6 +288,10 @@ def parse_args(parse=True, **optional_kwargs):
     kwargs.update(optional_kwargs)
 
     args = Config(**kwargs)
+
+    # torchrun fix
+    # refer to https://pytorch.org/docs/stable/elastic/run.html#transitioning-from-torch-distributed-launch-to-torchrun
+    args.local_rank = int(os.environ["LOCAL_RANK"])
 
     # Bind optimizer class.
     verbose = False

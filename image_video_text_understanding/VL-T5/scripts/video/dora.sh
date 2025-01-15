@@ -42,7 +42,7 @@ run_name=dora_lora_setting_${lr}_${lora_dim}
 output=snap/${folder_prefix}_${task}/$run_name
 
 TOKENIZERS_PARALLELISM=True PYTHONPATH=$PYTHONPATH:./src \
-python -m torch.distributed.launch \
+torchrun \
     --nproc_per_node=$1 \
     --master_port=26465 \
     src/${task}.py \
