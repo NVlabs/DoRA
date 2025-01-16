@@ -40,6 +40,8 @@ import modeling_bart
 from clip.model import VisualAdapter
 
 from adapters import AdapterController, MetaLayersAdapterController
+from ddp_fix import ddp_forward
+
 
 proj_dir = Path(__file__).resolve().parent.parent
 
@@ -251,12 +253,12 @@ class Trainer(TrainerBase):
                 if self.args.fp16 and _use_native_amp:
                     with autocast():
                         if self.args.distributed:
-                            results = self.model.module.train_step(batch)
+                            results = ddp_forward(self.model, batch)
                         else:
                             results = self.model.train_step(batch)
                 else:
                     if self.args.distributed:
-                        results = self.model.module.train_step(batch)
+                        results = ddp_forward(self.model, batch)
                     else:
                         results = self.model.train_step(batch)
 
