@@ -5,6 +5,7 @@
 # and any modifications thereto.  Any use, reproduction, disclosure or
 # distribution of this software and related documentation without an express
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
+from datetime import timedelta
 from trainer_base import TrainerBase
 import torch.backends.cudnn as cudnn
 import torch.multiprocessing as mp
@@ -649,7 +650,7 @@ def main_worker(gpu, args):
 
     if args.distributed:
         torch.cuda.set_device(args.gpu)
-        dist.init_process_group(backend='nccl')
+        dist.init_process_group(backend='nccl', timeout=timedelta(hours=1))
 
     import video.tvqa_data as tvqa_data
     import video.how2qa_data as how2qa_data
