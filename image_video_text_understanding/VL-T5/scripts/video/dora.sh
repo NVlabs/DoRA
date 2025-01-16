@@ -70,7 +70,7 @@ torchrun \
     --run_name $run_name
 
 ## this is for generating the output for submitting to https://value-benchmark.github.io/#:~:text=What%20is%20VALUE%3F,understanding%20both%20video%20and%20subtitles.
-python -m torch.distributed.launch \
+torchrun \
     --nproc_per_node=$1 \
     --master_port=26465 \
     src/${task}.py \
