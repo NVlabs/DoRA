@@ -291,7 +291,7 @@ def parse_args(parse=True, **optional_kwargs):
 
     # torchrun fix
     # refer to https://pytorch.org/docs/stable/elastic/run.html#transitioning-from-torch-distributed-launch-to-torchrun
-    args.local_rank = int(os.environ["LOCAL_RANK"])
+    args.local_rank = int(os.environ.get('LOCAL_RANK', args.local_rank))
 
     # Bind optimizer class.
     verbose = False
