@@ -540,7 +540,8 @@ class Trainer(TrainerBase):
                         json.dump(entry, f)
                         f.write('\n')
 
-        wandb.log({'finished': True})
+        if self.verbose:
+            wandb.log({'finished': True})
 
         if self.args.distributed:
             dist.barrier()
