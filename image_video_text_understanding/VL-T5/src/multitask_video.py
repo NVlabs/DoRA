@@ -163,7 +163,7 @@ class Trainer(TrainerBase):
         if args.multiGPU:
             if args.distributed:
                 self.model = DDP(self.model, device_ids=[args.gpu],
-                                 find_unused_parameters=True
+                                 find_unused_parameters=False
                                  )
         if self.verbose:
             print(f'It took {time() - start:.1f}s')
