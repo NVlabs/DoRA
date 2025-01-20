@@ -655,14 +655,13 @@ class Trainer(TrainerBase):
             return results
 
     def caption_evaluate(self, loader, dump_path=None):
-        evaluator = loader.evaluator
         results = self.caption_predict(loader, dump_path)
 
         if self.args.gpu == 0:
             predictions = results['predictions']
             if dump_path is None:
                 targets = results['targets']
-
+                evaluator = loader.evaluator
                 eval_results = evaluator.evaluate(predictions, targets)
                 return eval_results
 
