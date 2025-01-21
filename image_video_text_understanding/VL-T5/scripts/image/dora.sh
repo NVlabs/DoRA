@@ -38,6 +38,8 @@ project_name=${feature}_LMsingle_dora_${lora_dim}_bs${batch_size}_image224_lora_
 run_name=tune+lr${lr}_plzplz2
 output=snap/${folder_prefix}_${task}/$run_name
 
+num_gpus=$1
+
 TOKENIZERS_PARALLELISM=True PYTHONPATH=$PYTHONPATH:./src \
 torchrun \
     --nproc_per_node=$1 \
@@ -54,8 +56,8 @@ torchrun \
     --output $output ${@:2} \
     --num_beams 5 \
     --use_tasks_prompts \
-    --batch_size ${batch_size} \
-    --valid_batch_size ${batch_size} \
+    --batch_size $((batch_size/num_gpus)) \
+    --valid_batch_size $((batch_size/num_gpus)) \
     --use_dora \
     --unfreeze_bias \
     --unfreeze_layer_norms \

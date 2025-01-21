@@ -42,6 +42,8 @@ project_name=${feature}_LMsingle_dora${lora_dim}_bs${batch_size}_image224_video
 run_name=dora_lora_setting_${lr}_${lora_dim}
 output=snap/${folder_prefix}_${task}/$run_name
 
+num_gpus=$1
+
 TOKENIZERS_PARALLELISM=True PYTHONPATH=$PYTHONPATH:./src \
 torchrun \
     --nproc_per_node=$1 \
@@ -61,8 +63,8 @@ torchrun \
     --unfreeze_bias \
     --lora_settings \
     --lora_dim ${lora_dim} \
-    --batch_size ${batch_size} \
-    --valid_batch_size ${batch_size} \
+    --batch_size $((batch_size / num_gpus)) \
+    --valid_batch_size $((batch_size / num_gpus)) \
     --use_tasks_prompts \
     --tasks "tvqa,how2qa,tvc,yc2c" \
     --feature ${feature} --n_boxes 64 --downsample \
@@ -90,8 +92,8 @@ torchrun \
     --unfreeze_bias \
     --lora_settings \
     --lora_dim ${lora_dim} \
-    --batch_size ${batch_size} \
-    --valid_batch_size ${batch_size} \
+    --batch_size $((batch_size / num_gpus)) \
+    --valid_batch_size $((batch_size / num_gpus)) \
     --use_tasks_prompts \
     --tasks "tvqa,how2qa,tvc,yc2c" \
     --feature ${feature} --n_boxes 64 --downsample \
