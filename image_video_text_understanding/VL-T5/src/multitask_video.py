@@ -5,62 +5,37 @@
 # and any modifications thereto.  Any use, reproduction, disclosure or
 # distribution of this software and related documentation without an express
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
-import pickle
-from datetime import timedelta
-from typing import Optional
-from trainer_base import TrainerBase
-import torch.backends.cudnn as cudnn
-import torch.multiprocessing as mp
-import torch.distributed as dist
-from torch.nn.parallel import DistributedDataParallel as DDP
-import os
 import json
-import collections
-from pathlib import Path
-from packaging import version
-
-import numpy as np
-from tqdm import tqdm
-import torch
-import torch.nn as nn
 import logging
-import shutil
-from pprint import pprint, pformat
+import os
+import pickle
 from copy import deepcopy
-
-from param import parse_args
+from datetime import timedelta
+from pathlib import Path
+from typing import Optional
 
 import multitask_data
-
-from utils import LossMeter, set_global_logging_level
-from dist_utils import reduce_dict
+import torch
+import torch.backends.cudnn as cudnn
+import torch.distributed as dist
+import torch.nn as nn
+import video.how2qa_data as how2qa_data
+import video.tvc_data as tvc_data
+import video.tvqa_data as tvqa_data
+import video.yc2c_data as yc2c_data
 import wandb
-
-from vis_encoder import get_vis_encoder
-from transformers.models.t5.modeling_t5 import T5LayerNorm
-import modeling_t5
-import modeling_bart
-from clip.model import VisualAdapter
-
 from adapters import AdapterController, MetaLayersAdapterController
 from ddp_fix import ddp_forward
-
+from param import parse_args
+from torch.cuda.amp import autocast
+from torch.nn.parallel import DistributedDataParallel as DDP
+from tqdm import tqdm
+from trainer_base import TrainerBase
+from utils import LossMeter, set_global_logging_level
+from video.video_model import VLBartVideo, VLT5Video
+from vis_encoder import get_vis_encoder
 
 proj_dir = Path(__file__).resolve().parent.parent
-
-
-_use_native_amp = False
-_use_apex = False
-
-# Check if Pytorch version >= 1.6 to switch between Native AMP and Apex
-if version.parse(torch.__version__) < version.parse("1.6"):
-    from transormers.file_utils import is_apex_available # type: ignore
-    if is_apex_available():
-        from apex import amp # type: ignore
-    _use_apex = True
-else:
-    _use_native_amp = True
-    from torch.cuda.amp import autocast
 
 class Trainer(TrainerBase):
     def __init__(self, args, train_loader=None, val_loader=None, test_loader=None, train=True):
@@ -73,8 +48,6 @@ class Trainer(TrainerBase):
 
         if not self.verbose:
             set_global_logging_level(logging.ERROR, ["transformers"])
-
-        from video.video_model import VLT5Video, VLBartVideo
 
         model_kwargs = {}
         if 't5' in args.backbone:
@@ -154,11 +127,8 @@ class Trainer(TrainerBase):
         if train:
             self.optim, self.lr_scheduler = self.create_optimizer_and_scheduler()
 
-            if self.args.fp16 and _use_native_amp:
+            if self.args.fp16:
                 self.scaler = torch.cuda.amp.GradScaler()
-            elif _use_apex:
-                self.model, self.optim = amp.initialize(
-                    self.model, self.optim, opt_level='O1', verbosity=self.verbose)
 
         if args.multiGPU:
             if args.distributed:
@@ -190,17 +160,6 @@ class Trainer(TrainerBase):
             best_yc2c_valid = 0
             best_yc2c_epoch = 0
 
-            # if 't5' in self.args.backbone:
-            #     if self.args.use_vision:
-            #         project_name = "VLT5_multitask_video"
-            #     else:
-            #         project_name = "T5_multitask_video"
-            # elif 'bart' in self.args.backbone:
-            #     if self.args.use_vision:
-            #         project_name = "VLBart_multitask_video"
-            #     else:
-            #         project_name = "Bart_multitask_video"
-
             wandb.init(project=self.args.project_name)
             wandb.run.name = self.args.run_name
             wandb.config.update(self.args)
@@ -212,9 +171,6 @@ class Trainer(TrainerBase):
             base_path = str(src_dir.parent)
             src_dir = str(src_dir)
             wandb.save(os.path.join(src_dir + "/*.py"), base_path=base_path)
-
-        if self.args.distributed:
-            dist.barrier()
 
         global_step = 0
 
@@ -231,7 +187,6 @@ class Trainer(TrainerBase):
 
             epoch_results = {
                 'loss': 0.,
-
             }
 
             task_counter = {
@@ -242,18 +197,12 @@ class Trainer(TrainerBase):
             }
 
             for step_i, batch in enumerate(self.train_loader):
-
-                # print(f'GPU{self.args.gpu} inside training loop')
-                # print(batch)
                 task = batch['task']
-                # if self.verbose:
-                #     print('task', task)
                 task_counter[task] += 1
-
                 batch['log_train_accuracy'] = self.args.log_train_accuracy
 
                 # self.optim.zero_grad()
-                if self.args.fp16 and _use_native_amp:
+                if self.args.fp16:
                     with autocast():
                         if self.args.distributed:
                             results = ddp_forward(self.model, batch)
@@ -283,39 +232,21 @@ class Trainer(TrainerBase):
 
                     loss = loss + self.args.lambda_z * reg_loss
 
-                    # wandb.log(
-                    #     {"Reg loss": reg_loss.item()},
-                    #     step=global_step
-                    # )
-
-                # print(f'GPU{self.args.gpu} after loss')
-
-                if self.args.fp16 and _use_native_amp:
+                if self.args.fp16:
                     self.scaler.scale(loss).backward()
-                elif self.args.fp16 and _use_apex:
-                    with amp.scale_loss(loss, self.optim) as scaled_loss:
-                        scaled_loss.backward()
                 else:
                     loss.backward()
-
-                # print(f'GPU{self.args.gpu} after backward')
 
                 loss = loss.detach()
 
                 # Update Parameters
                 if self.args.clip_grad_norm > 0:
-                    if self.args.fp16 and _use_native_amp:
+                    if self.args.fp16:
                         self.scaler.unscale_(self.optim)
-                        torch.nn.utils.clip_grad_norm_(
-                            self.model.parameters(), self.args.clip_grad_norm)
-                    elif self.args.fp16 and _use_apex:
-                        torch.nn.utils.clip_grad_norm_(amp.master_params(
-                            self.optim), self.args.clip_grad_norm)
-                    else:
-                        torch.nn.utils.clip_grad_norm_(
-                            self.model.parameters(), self.args.clip_grad_norm)
+                    torch.nn.utils.clip_grad_norm_(
+                        self.model.parameters(), self.args.clip_grad_norm)
 
-                if self.args.fp16 and _use_native_amp:
+                if self.args.fp16:
                     self.scaler.step(self.optim)
                     self.scaler.update()
                 else:
@@ -323,8 +254,8 @@ class Trainer(TrainerBase):
 
                 if self.lr_scheduler:
                     self.lr_scheduler.step()
-                for param in self.model.parameters():
-                    param.grad = None
+                
+                self.optim.zero_grad(set_to_none=True)
 
                 global_step += 1
 
@@ -333,10 +264,7 @@ class Trainer(TrainerBase):
                         epoch_results[k] += v.item()
 
                 if self.lr_scheduler:
-                    if version.parse(torch.__version__) >= version.parse("1.4"):
-                        lr = self.lr_scheduler.get_last_lr()[0]
-                    else:
-                        lr = self.lr_scheduler.get_lr()[0]
+                    lr = self.lr_scheduler.get_last_lr()[0]
                 else:
                     try:
                         lr = self.optim.get_lr()[0]
@@ -369,12 +297,8 @@ class Trainer(TrainerBase):
                     pbar.set_description(desc_str)
                     pbar.update(1)
 
-                if self.args.distributed:
-                    dist.barrier()
-
             if self.verbose:
                 pbar.close()
-                # self.save("Epoch%02d" % (epoch + 1))
 
             # Validation
             log_str = ''
@@ -440,9 +364,6 @@ class Trainer(TrainerBase):
                 wandb.log(wandb_log_dict, step=epoch)
                 print(log_str)
 
-            if self.args.distributed:
-                dist.barrier()
-
         if self.args.epochs > 0: # model is trained
             self.save("LAST")
 
@@ -452,9 +373,6 @@ class Trainer(TrainerBase):
                 print("start generating test submission file")
                 if not os.path.isdir(self.args.output):
                     os.makedirs(self.args.output, exist_ok=True)
-            
-            if self.args.distributed:
-                dist.barrier()
             
             if 'tvqa' in self.args.tasks:
                 # TVQA
@@ -556,7 +474,6 @@ class Trainer(TrainerBase):
             wandb.run.summary['finished'] = True
 
         if self.args.distributed:
-            dist.barrier()
             dist.destroy_process_group()
 
     def qa_predict(self, loader, dump_path=None):
@@ -726,10 +643,6 @@ def main_worker(gpu, args):
         torch.cuda.set_device(args.gpu)
         dist.init_process_group(backend='nccl', timeout=timedelta(hours=1))
 
-    import video.tvqa_data as tvqa_data
-    import video.how2qa_data as how2qa_data
-    import video.tvc_data as tvc_data
-    import video.yc2c_data as yc2c_data
     args.feat_dim = 512
 
     tvqa_args = deepcopy(args)
@@ -806,11 +719,12 @@ def main_worker(gpu, args):
     # Validation set
     val_loader = {}
     if args.epochs > 0:
+        valid_batch_size = args.valid_batch_size or args.batch_size
         if 'tvqa' in args.tasks:
             print(f'Building TVQA val loader at GPU {gpu}')
             tvqa_val_loader = tvqa_data.get_loader(
                 tvqa_args,
-                split='val', mode='val', batch_size=tvqa_args.batch_size,
+                split='val', mode='val', batch_size=valid_batch_size,
                 distributed=args.distributed, gpu=args.gpu,
                 workers=val_num_workers,
                 topk=args.valid_topk,
@@ -820,7 +734,7 @@ def main_worker(gpu, args):
             print(f'Building How2QA val loader at GPU {gpu}')
             how2qa_val_loader = how2qa_data.get_loader(
                 how2qa_args,
-                split='val_release', mode='val', batch_size=how2qa_args.batch_size,
+                split='val_release', mode='val', batch_size=valid_batch_size,
                 distributed=args.distributed, gpu=args.gpu,
                 workers=val_num_workers,
                 topk=args.valid_topk,
@@ -830,7 +744,7 @@ def main_worker(gpu, args):
             print(f'Building TVC val loader at GPU {gpu}')
             tvc_val_loader = tvc_data.get_loader(
                 tvc_args,
-                split='val_release', mode='val', batch_size=tvc_args.batch_size,
+                split='val_release', mode='val', batch_size=valid_batch_size,
                 distributed=args.distributed, gpu=args.gpu,
                 workers=val_num_workers,
                 topk=args.valid_topk,
@@ -840,7 +754,7 @@ def main_worker(gpu, args):
             print(f'Building YC2C val loader at GPU {gpu}')
             yc2c_val_loader = yc2c_data.get_loader(
                 yc2c_args,
-                split='val_release', mode='val', batch_size=yc2c_args.batch_size,
+                split='val_release', mode='val', batch_size=valid_batch_size,
                 distributed=args.distributed, gpu=args.gpu,
                 workers=val_num_workers,
                 topk=args.valid_topk,
@@ -851,11 +765,12 @@ def main_worker(gpu, args):
 
     test_loader = {}
     if args.epochs == 0: # test only
+        valid_batch_size = args.valid_batch_size or args.batch_size
         if 'tvqa' in args.tasks:
             print(f'Building TVQA test loader at GPU {gpu}')
             tvqa_test_loader = tvqa_data.get_loader(
                 tvqa_args,
-                split='test_public,test_release', mode='val', batch_size=tvqa_args.batch_size,
+                split='test_public,test_release', mode='val', batch_size=valid_batch_size,
                 distributed=args.distributed, gpu=args.gpu,
                 workers=val_num_workers,
                 topk=args.valid_topk,
@@ -865,7 +780,7 @@ def main_worker(gpu, args):
             print(f'Building How2QA test loader at GPU {gpu}')
             how2qa_test_loader = how2qa_data.get_loader(
                 how2qa_args,
-                split='test_public_release', mode='val', batch_size=how2qa_args.batch_size,
+                split='test_public_release', mode='val', batch_size=valid_batch_size,
                 distributed=args.distributed, gpu=args.gpu,
                 workers=val_num_workers,
                 topk=args.valid_topk,
@@ -875,7 +790,7 @@ def main_worker(gpu, args):
             print(f'Building TVC test loader at GPU {gpu}')
             tvc_test_loader = tvc_data.get_loader(
                 tvc_args,
-                split='test_release', mode='val', batch_size=tvc_args.batch_size,
+                split='test_release', mode='val', batch_size=valid_batch_size,
                 distributed=args.distributed, gpu=args.gpu,
                 workers=val_num_workers,
                 topk=args.valid_topk,
@@ -885,7 +800,7 @@ def main_worker(gpu, args):
             print(f'Building YC2C test loader at GPU {gpu}')
             yc2c_test_loader = yc2c_data.get_loader(
                 yc2c_args,
-                split='test_release', mode='val', batch_size=yc2c_args.batch_size,
+                split='test_release', mode='val', batch_size=valid_batch_size,
                 distributed=args.distributed, gpu=args.gpu,
                 workers=val_num_workers,
                 topk=args.valid_topk,
