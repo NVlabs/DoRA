@@ -597,7 +597,8 @@ class Trainer(TrainerBase):
                 # collect
                 all_qid_ans = self.collect_results_gpu(list_qid_ans, len(loader.dataset))
                 # convert back to dict
-                quesid2ans = dict(all_qid_ans)
+                if self.args.gpu == 0:
+                    quesid2ans = dict(all_qid_ans)
 
             if self.args.gpu == 0 and dump_path is not None:
                 loader.evaluator.dump_result(quesid2ans, dump_path)
@@ -648,7 +649,8 @@ class Trainer(TrainerBase):
                 # collect
                 all_qid_ans = self.collect_results_gpu(list_qid_ans, len(loader.dataset))
                 # convert back to dict
-                quesid2ans = dict(all_qid_ans)
+                if self.args.gpu == 0:
+                    quesid2ans = dict(all_qid_ans)
 
             if self.args.gpu == 0 and dump_path is not None:
                 print('\nsave dump at', dump_path)
@@ -691,7 +693,8 @@ class Trainer(TrainerBase):
                 # collect
                 all_qid_ans = self.collect_results_gpu(list_qid_ans, len(loader.dataset))
                 # convert back to dict
-                quesid2ans = dict(all_qid_ans)
+                if self.args.gpu == 0:
+                    quesid2ans = dict(all_qid_ans)
 
             if self.args.gpu == 0 and dump_path is not None:
                 loader.evaluator.dump_result(quesid2ans, dump_path)
@@ -774,6 +777,11 @@ class Trainer(TrainerBase):
                 QA_R_results += sum(QA_R_correct)
                 Q_AR_results += sum(Q_AR_correct)
                 n_total += len(qa_pred)
+
+        if self.args.distributed:
+            numbers = torch.tensor([Q_A_results, QA_R_results, Q_AR_results, n_total], device=self.args.gpu)
+            dist.all_reduce(numbers, op=dist.ReduceOp.SUM)
+            Q_A_results, QA_R_results, Q_AR_results, n_total = numbers.tolist()
 
         score_dict = {}
         score_dict['Q_A'] = Q_A_results
@@ -864,9 +872,10 @@ class Trainer(TrainerBase):
                 predictions = self.collect_results_gpu(predictions, size)
                 targets[0] = self.collect_results_gpu(targets[0], size)
 
-            assert len(predictions) == len(
-                targets[0]), (len(predictions), len(targets[0]))
-            assert len(targets) == 1
+            if self.args.gpu == 0:
+                assert len(predictions) == len(
+                    targets[0]), (len(predictions), len(targets[0]))
+                assert len(targets) == 1
 
             results = {
                 'predictions': predictions,
@@ -920,7 +929,8 @@ class Trainer(TrainerBase):
                 # collect
                 all_qid_ans = self.collect_results_gpu(list_qid_ans, len(loader.dataset))
                 # convert back to dict
-                quesid2ans = dict(all_qid_ans)
+                if self.args.gpu == 0:
+                    quesid2ans = dict(all_qid_ans)
 
             if self.args.gpu == 0 and dump_path is not None:
                 loader.evaluator.dump_result(quesid2ans, dump_path)
