@@ -166,6 +166,7 @@ class Trainer(TrainerBase):
 
         if args.multiGPU:
             if args.distributed:
+                self.model = nn.SyncBatchNorm.convert_sync_batchnorm(self.model)
                 self.model = DDP(self.model, device_ids=[args.gpu],
                                  find_unused_parameters=False
                                  )
