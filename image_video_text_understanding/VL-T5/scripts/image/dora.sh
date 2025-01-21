@@ -39,6 +39,7 @@ run_name=tune+lr${lr}_plzplz2
 output=snap/${folder_prefix}_${task}/$run_name
 
 num_gpus=$1
+samples_per_gpu=$(((batch_size+num_gpus-1)/num_gpus))
 
 TOKENIZERS_PARALLELISM=True PYTHONPATH=$PYTHONPATH:./src \
 torchrun \
@@ -56,8 +57,8 @@ torchrun \
     --output $output ${@:2} \
     --num_beams 5 \
     --use_tasks_prompts \
-    --batch_size $((batch_size/num_gpus)) \
-    --valid_batch_size $((batch_size/num_gpus)) \
+    --batch_size ${samples_per_gpu} \
+    --valid_batch_size ${samples_per_gpu} \
     --use_dora \
     --unfreeze_bias \
     --unfreeze_layer_norms \
