@@ -10,7 +10,6 @@ import logging
 import os
 import pickle
 from copy import deepcopy
-from datetime import timedelta
 from pathlib import Path
 from typing import Optional
 
@@ -143,8 +142,8 @@ class Trainer(TrainerBase):
         if self.verbose:
             tvqa_loss_meter = LossMeter()
             tvc_loss_meter = LossMeter()
-            # best_eval_loss = 9595.
-            quesid2ans = {}
+            
+            # tvqa
             best_tvqa_valid = 0.
             best_tvqa_epoch = 0
 
@@ -165,7 +164,6 @@ class Trainer(TrainerBase):
             wandb.config.update(self.args)
             wandb.watch(self.model)
             wandb.run.summary["percent of updated parameters (%)"] = self.percent_updated_parameters
-            
 
             src_dir = Path(__file__).resolve().parent
             base_path = str(src_dir.parent)
@@ -201,7 +199,6 @@ class Trainer(TrainerBase):
                 task_counter[task] += 1
                 batch['log_train_accuracy'] = self.args.log_train_accuracy
 
-                # self.optim.zero_grad()
                 if self.args.fp16:
                     with autocast():
                         if self.args.distributed:
@@ -641,7 +638,7 @@ def main_worker(gpu, args):
 
     if args.distributed:
         torch.cuda.set_device(args.gpu)
-        dist.init_process_group(backend='nccl', timeout=timedelta(hours=1))
+        dist.init_process_group(backend='nccl')
 
     args.feat_dim = 512
 
