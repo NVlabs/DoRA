@@ -541,8 +541,6 @@ class TrainerBase(object):
                     print(f"{name} is trainable...")
                     for param_name, param in sub_module.named_parameters():
                         param.requires_grad = True
-
-        print(self.model)
             
     def create_tokenizer(self, **kwargs):
         from transformers import T5Tokenizer, BartTokenizer, T5TokenizerFast, BartTokenizerFast
