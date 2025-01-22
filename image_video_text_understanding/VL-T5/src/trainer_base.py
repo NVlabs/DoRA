@@ -81,7 +81,7 @@ class DoraLinear_simple(nn.Module):
             self.register_parameter('bias', None)
         ### init weight_m and weight_v and bias
         with torch.no_grad():
-            m = nn.utils.weight_norm(m, dim=0)
+            m = nn.utils.parametrizations.weight_norm(m, dim=0)
             copy_weight_m = m.weight_g.detach()
             copy_weight_v = m.weight_v.detach()
             self.weight_m.copy_(copy_weight_m)
@@ -127,7 +127,7 @@ class DoraLinear(nn.Module):
             self.register_parameter('bias', None)
         ### init weight_m and weight_v and bias
         with torch.no_grad():
-            m = nn.utils.weight_norm(m, dim=0)
+            m = nn.utils.parametrizations.weight_norm(m, dim=0)
             copy_weight_m = m.weight_g.detach()
             copy_weight_v = m.weight_v.detach()
             self.weight_m.copy_(copy_weight_m)
