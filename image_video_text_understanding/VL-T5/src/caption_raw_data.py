@@ -350,27 +350,27 @@ def get_loader(args, split='train', mode='train',
         topk=topk,
         verbose=verbose,
         args=args,
-        mode=mode)
-    # elif 'CC' in split:
-    #     dataset = CCDataset(split, transform=transform, topk=topk)
+        mode=mode
+    )
 
-    if distributed and mode == 'train':
-        # sampler = DistributedSampler(dataset, num_replicas=world_size, rank=local_rank)
-        train_sampler = DistributedSampler(dataset)
-        # train_sampler = RandomNonreplacmentSampler(dataset, dataset.n_iter)
+    if distributed:
+        sampler = DistributedSampler(dataset,
+                                     shuffle=mode=='train',
+                                     drop_last=mode=='train')
     else:
-        train_sampler = None
+        sampler = None
     if mode == 'train':
         loader = DataLoader(
-            dataset, batch_size=batch_size, shuffle=(train_sampler is None),
-            num_workers=workers, pin_memory=True, sampler=train_sampler,
+            dataset, batch_size=batch_size, shuffle=(sampler is None),
+            num_workers=workers, pin_memory=True, sampler=sampler,
             collate_fn=dataset.collate_fn)
     else:
         loader = DataLoader(
             dataset,
-            batch_size=batch_size, shuffle=False,
+            batch_size=batch_size,
             num_workers=workers, pin_memory=True,
-            sampler=None,
+            sampler=sampler,
+            shuffle=None if (sampler is not None) else False,
             collate_fn=dataset.collate_fn,
             drop_last=False)
 

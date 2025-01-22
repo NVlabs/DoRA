@@ -398,7 +398,9 @@ def get_loader(args, split='karpathy_train', mode='train',
         mode=mode)
 
     if distributed:
-        sampler = DistributedSampler(dataset)
+        sampler = DistributedSampler(dataset,
+                                     shuffle=mode=='train',
+                                     drop_last=mode=='train')
     else:
         sampler = None
 
