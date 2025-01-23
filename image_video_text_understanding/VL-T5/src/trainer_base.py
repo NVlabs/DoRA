@@ -6,65 +6,35 @@
 # distribution of this software and related documentation without an express
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-import torch.backends.cudnn as cudnn
-import torch.multiprocessing as mp
-import torch.distributed as dist
-from torch.nn.parallel import DistributedDataParallel as DDP
+import logging
+import math
 import os
 import re
-import collections
 from pathlib import Path
-from packaging import version
-
-import numpy as np
-from tqdm import tqdm
-import torch
-import torch.nn as nn
-import logging
-import shutil
 from pprint import pprint
 
-from utils import load_state_dict, LossMeter, set_global_logging_level, FusedOptimizer
-import wandb
-from pprint import pformat
-from transformers.models.t5.modeling_t5 import T5LayerNorm
 import modeling_bart
 import modeling_t5
-from adapters import (
-    AdapterLayer, 
-    AdapterController,
-    OutputParallelAdapterLayer,
-    MetaAdapterConfig,
-    AdapterConfig,
-    CompactorConfig,
-    LRAdapterConfig,
-    TaskEmbeddingController,
-    AdapterLayersHyperNetController,
-    AdapterLayersOneHyperNetController
-)
-
-from prompt import EncoderPromptConfig, DecoderPromptConfig, PromptController
-from lora import LoraConfig, LoRALayer
-
-from vis_encoder import CLIPResNetEncoder
+import torch
+import torch.nn as nn
+from adapters import (AdapterConfig, AdapterController,
+                      AdapterLayersHyperNetController,
+                      AdapterLayersOneHyperNetController, CompactorConfig,
+                      LRAdapterConfig, MetaAdapterConfig,
+                      OutputParallelAdapterLayer, TaskEmbeddingController)
 from clip.model import VisualAdapter
-
-import math
+from lora import LoraConfig, LoRALayer
+from prompt import DecoderPromptConfig, EncoderPromptConfig, PromptController
+from tokenization import VLT5TokenizerFast
+from torch.optim import AdamW
+from transformers import BartConfig, BartTokenizer, T5Config, T5TokenizerFast
+from transformers.models.t5.modeling_t5 import T5LayerNorm
+from transformers.optimization import get_linear_schedule_with_warmup
+from utils import FusedOptimizer, load_state_dict, set_global_logging_level
+from vis_encoder import CLIPResNetEncoder
 
 proj_dir = Path(__file__).resolve().parent.parent
 
-_use_native_amp = False
-_use_apex = False
-
-# Check if Pytorch version >= 1.6 to switch between Native AMP and Apex
-if version.parse(torch.__version__) < version.parse("1.6"):
-    from transormers.file_utils import is_apex_available
-    if is_apex_available():
-        from apex import amp
-    _use_apex = True
-else:
-    _use_native_amp = True
-    from torch.cuda.amp import autocast
 
 class DoraLinear_simple(nn.Module):
     def __init__(self, m: torch.nn.Linear, lora_r= 1, lora_dropout = 0.0, lora_s = 1.0, device=None, dtype=None):
@@ -181,8 +151,6 @@ class TrainerBase(object):
         self.deepspeed = args.deepspeed
 
     def create_config(self):
-        from transformers import T5Config, BartConfig
-
         if 't5' in self.args.backbone:
             config_class = T5Config
         elif 'bart' in self.args.backbone:
@@ -543,8 +511,6 @@ class TrainerBase(object):
                         param.requires_grad = True
             
     def create_tokenizer(self, **kwargs):
-        from transformers import T5Tokenizer, BartTokenizer, T5TokenizerFast, BartTokenizerFast
-        from tokenization import VLT5Tokenizer, VLT5TokenizerFast
 
         if 't5' in self.args.tokenizer:
             if self.args.use_vision:
@@ -573,8 +539,6 @@ class TrainerBase(object):
             print('Building Optimizer')
 
         lr_scheduler = None
-
-        from transformers.optimization import AdamW, get_linear_schedule_with_warmup
 
         no_decay = ["bias", "LayerNorm.weight"]
 
