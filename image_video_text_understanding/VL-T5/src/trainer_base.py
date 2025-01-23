@@ -24,6 +24,7 @@ from adapters import (AdapterConfig, AdapterController,
                       OutputParallelAdapterLayer, TaskEmbeddingController)
 from clip.model import VisualAdapter
 from lora import LoraConfig, LoRALayer
+from peft import LoraConfig, get_peft_model
 from prompt import DecoderPromptConfig, EncoderPromptConfig, PromptController
 from tokenization import VLT5TokenizerFast
 from torch.optim import AdamW
@@ -313,14 +314,6 @@ class TrainerBase(object):
         # the purpose is to fix some of the norm statistics
         model = self.model.module if self.args.distributed else self.model
 
-        def LM_LN_eval(model):
-            for name, sub_module in model.named_modules():
-                if "adapter" in name: # skip all adapters modules
-                    continue
-                if isinstance(sub_module, (modeling_bart.JointEncoder, modeling_bart.BartDecoder, modeling_t5.T5Stack, modeling_t5.JointEncoder)):
-                    # print(f"Change {name} to eval mode...")
-                    sub_module.eval()
-
         def only_LN_eval(model):
             for name, sub_module in model.named_modules():
                 if "adapter" in name: # skip all adapters modules
@@ -381,40 +374,6 @@ class TrainerBase(object):
                 if any(t in n for t in targets):
                     p.requires_grad = True
                     print(f"{n} is trainable...")
-
-        if self.args.use_dora:
-            print("apply dora tuning")
-
-            if self.args.lora_settings:
-                dora_targets = ["layers"]
-                dora_lora_target = ["v_proj", "q_proj"]
-                it=[(name,m) for name,m in self.model.named_modules()]
-                module_dict={}
-                for n, p in it:
-                    module_dict[n]=p
-                    idx=n.rfind('.')
-                    if idx==-1:
-                        idx=0
-                    father_name=n[:idx]
-                    if father_name in module_dict:
-                        father_module=module_dict[father_name]
-                    else:
-                        raise RuntimeError(f"father module {father_name} not found")
-                    
-                    if any(t in n for t in dora_targets) and isinstance(p,nn.Linear):
-                        if any(t in n for t in dora_lora_target):
-                            
-                            if self.args.dora_simple:
-                                print("apply dora simple instead")
-                                replace_m = DoraLinear_simple(m = p, lora_r= self.args.lora_dim, lora_dropout= 0.0, device=self.model.device)
-                            else:
-                                replace_m = DoraLinear(m = p, lora_r= self.args.lora_dim, lora_dropout= 0.0, device=self.model.device)
-                            setattr(father_module,n[idx+1:],replace_m)
-                            replace_m.weight_m.requires_grad = True
-                            replace_m.weight_v.requires_grad = False
-                            replace_m.bias.requires_grad = True
-                            del p
-
 
         if self.args.unfreeze_bias:
             targets = ["bias"]
@@ -509,6 +468,32 @@ class TrainerBase(object):
                     print(f"{name} is trainable...")
                     for param_name, param in sub_module.named_parameters():
                         param.requires_grad = True
+
+        if self.args.use_dora:
+            print("apply dora tuning")
+
+            if not self.args.unfreeze_language_model:
+                # unfreeze language model anyway to mimic the full fine-tuning setting
+                targets = ["lm_head", "shared"]
+                for n, p in self.model.named_parameters():
+                    if any(t in n for t in targets):
+                        p.requires_grad = True
+                        print(f"{n} is trainable...")
+                for name, sub_module in self.model.named_modules():
+                    if isinstance(sub_module, (modeling_bart.JointEncoder, modeling_bart.BartDecoder, modeling_t5.T5Stack, modeling_t5.JointEncoder)):
+                        # if len(name.split(".")) < 7: # this will not consider layer norms inside adapters then.
+                        for param_name, param in sub_module.named_parameters():
+                            print(f"{param_name} is trainable...")
+                            param.requires_grad = True
+            
+            peft_config = LoraConfig(
+                r=self.args.lora_dim,
+                target_modules=["v_proj", "q_proj"],
+                lora_alpha=self.args.lora_dim,
+                bias="all",
+            )
+            self.model = get_peft_model(self.model, peft_config)
+
             
     def create_tokenizer(self, **kwargs):
 

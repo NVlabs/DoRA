@@ -203,9 +203,7 @@ def parse_args(parse=True, **optional_kwargs):
     parser.add_argument('--use_lm_head_adapter', action="store_true")
 
     # dora
-    parser.add_argument('--use_dora', action="store_true")    
-    parser.add_argument('--lora_settings', action="store_true")
-    parser.add_argument('--dora_simple', action="store_true")
+    parser.add_argument('--use_dora', action="store_true")
 
     # unfreeze_layer_norm_encoder or decoder
     parser.add_argument('--unfreeze_encoder_layer_norms', action="store_true")

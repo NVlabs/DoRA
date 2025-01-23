@@ -61,7 +61,6 @@ torchrun \
     --num_beams 5 \
     --use_dora \
     --unfreeze_bias \
-    --lora_settings \
     --lora_dim ${lora_dim} \
     --batch_size $((batch_size / num_gpus)) \
     --valid_batch_size $((batch_size / num_gpus)) \
@@ -90,7 +89,6 @@ torchrun \
     --use_dora \
     --load snap/${folder_prefix}_${task}/$run_name/LAST.pth \
     --unfreeze_bias \
-    --lora_settings \
     --lora_dim ${lora_dim} \
     --batch_size $((batch_size / num_gpus)) \
     --valid_batch_size $((batch_size / num_gpus)) \

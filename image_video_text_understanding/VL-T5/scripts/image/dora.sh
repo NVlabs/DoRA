@@ -62,7 +62,6 @@ torchrun \
     --use_dora \
     --unfreeze_bias \
     --unfreeze_layer_norms \
-    --lora_settings \
     --lora_dim ${lora_dim} \
     --tasks "vqa,gqa,nlvr,caption" \
     --feature ${feature} --n_boxes 36 --downsample \
