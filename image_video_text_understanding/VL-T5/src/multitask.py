@@ -23,14 +23,13 @@ import wandb
 from adapters import AdapterController, MetaLayersAdapterController
 from ddp_fix import ddp_forward
 from dist_utils import reduce_dict
-from packaging import version
+from multitask_model import VLBartMultiTask, VLT5MultiTask
 from param import parse_args
 from torch.cuda.amp import autocast
 from torch.nn.parallel import DistributedDataParallel as DDP
 from tqdm import tqdm
 from trainer_base import TrainerBase
-from utils import LossMeter, set_global_logging_level, path_print
-from multitask_model import VLBartMultiTask, VLT5MultiTask
+from utils import LossMeter, path_print, set_global_logging_level
 from vis_encoder import get_vis_encoder
 
 proj_dir = Path(__file__).resolve().parent.parent

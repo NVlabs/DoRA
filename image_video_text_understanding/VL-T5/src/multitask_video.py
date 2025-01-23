@@ -30,7 +30,7 @@ from torch.cuda.amp import autocast
 from torch.nn.parallel import DistributedDataParallel as DDP
 from tqdm import tqdm
 from trainer_base import TrainerBase
-from utils import LossMeter, set_global_logging_level, path_print
+from utils import LossMeter, path_print, set_global_logging_level
 from video.video_model import VLBartVideo, VLT5Video
 from vis_encoder import get_vis_encoder
 

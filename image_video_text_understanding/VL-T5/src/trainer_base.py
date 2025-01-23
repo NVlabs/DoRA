@@ -37,98 +37,6 @@ from vis_encoder import CLIPResNetEncoder
 proj_dir = Path(__file__).resolve().parent.parent
 
 
-class DoraLinear_simple(nn.Module):
-    def __init__(self, m: torch.nn.Linear, lora_r= 1, lora_dropout = 0.0, lora_s = 1.0, device=None, dtype=None):
-        factory_kwargs = {'device': device, 'dtype': dtype}
-        super().__init__()
-        self.in_features = m.in_features
-        self.out_features = m.out_features
-        self.original_weight_matrix = m.weight.detach()
-        self.weight_m = nn.Parameter(torch.empty((self.out_features, 1), **factory_kwargs),requires_grad=True)
-        self.weight_v = nn.Parameter(torch.empty((self.out_features, self.in_features), **factory_kwargs),requires_grad=False)
-        if m.bias is not None:
-            self.bias = nn.Parameter(torch.empty(self.out_features, **factory_kwargs), requires_grad = True)
-        else:
-            self.register_parameter('bias', None)
-        ### init weight_m and weight_v and bias
-        with torch.no_grad():
-            m = nn.utils.weight_norm(m, dim=0)
-            copy_weight_m = m.weight_g.detach()
-            copy_weight_v = m.weight_v.detach()
-            self.weight_m.copy_(copy_weight_m)
-            self.weight_v.copy_(copy_weight_v)
-            if m.bias is not None:
-                copy_bias = m.bias.detach()
-                self.bias.copy_(copy_bias)
-
-
-        self.lora = LoRALayer(r=lora_r,lora_alpha=lora_r, lora_dropout=0.1,merge_weights=False)
-        self.lora_A = nn.Parameter(m.weight.new_zeros((self.lora.r, self.in_features)))
-        self.lora_B = nn.Parameter(m.weight.new_zeros((self.out_features, self.lora.r)))
-        self.scaling = lora_s  ## don't know if this is really needed as tining scaling is essentially the same as tuning learning rate
-
-        nn.init.kaiming_uniform_(self.lora_A, a=math.sqrt(5))
-        nn.init.zeros_(self.lora_B)
-        self.merged = False
-
-    def forward(self, input: torch.Tensor) -> torch.Tensor:
-
-        new_weight_v = self.weight_v + (self.lora_A.T @ self.lora_B.T).T.detach() * self.scaling
-        weight = ( self.weight_m / (torch.linalg.norm(new_weight_v,dim=1)).unsqueeze(1)) * (self.weight_v + (self.lora_A.T @ self.lora_B.T).T * self.scaling)
-
-        return nn.functional.linear(input, weight, self.bias)
-
-    def extra_repr(self) -> str:
-        return 'in_features={}, out_features={}, bias={}, lora_dim={}, lora_scale={}'.format(
-            self.in_features, self.out_features, self.bias is not None, self.lora.r, self.scaling
-        )
-
-class DoraLinear(nn.Module):
-    def __init__(self, m: torch.nn.Linear, lora_r= 1, lora_dropout = 0.0, lora_s = 1.0, device=None, dtype=None):
-        factory_kwargs = {'device': device, 'dtype': dtype}
-        super().__init__()
-        self.in_features = m.in_features
-        self.out_features = m.out_features
-        self.original_weight_matrix = m.weight.detach()
-        self.weight_m = nn.Parameter(torch.empty((self.out_features, 1), **factory_kwargs),requires_grad=True)
-        self.weight_v = nn.Parameter(torch.empty((self.out_features, self.in_features), **factory_kwargs),requires_grad=False)
-        if m.bias is not None:
-            self.bias = nn.Parameter(torch.empty(self.out_features, **factory_kwargs), requires_grad = True)
-        else:
-            self.register_parameter('bias', None)
-        ### init weight_m and weight_v and bias
-        with torch.no_grad():
-            m = nn.utils.weight_norm(m, dim=0)
-            copy_weight_m = m.weight_g.detach()
-            copy_weight_v = m.weight_v.detach()
-            self.weight_m.copy_(copy_weight_m)
-            self.weight_v.copy_(copy_weight_v)
-            if m.bias is not None:
-                copy_bias = m.bias.detach()
-                self.bias.copy_(copy_bias)
-
-
-        self.lora = LoRALayer(r=lora_r,lora_alpha=lora_r, lora_dropout=0.1,merge_weights=False)
-        self.lora_A = nn.Parameter(m.weight.new_zeros((self.lora.r, self.in_features)))
-        self.lora_B = nn.Parameter(m.weight.new_zeros((self.out_features, self.lora.r)))
-        self.scaling = lora_s  ## don't know if this is really needed as tining scaling is essentially the same as tuning learning rate
-
-        nn.init.kaiming_uniform_(self.lora_A, a=math.sqrt(5))
-        nn.init.zeros_(self.lora_B)
-        self.merged = False
-
-    def forward(self, input: torch.Tensor) -> torch.Tensor:
-
-        new_weight_v = self.weight_v + (self.lora_A.T @ self.lora_B.T).T * self.scaling
-        weight = ( self.weight_m / (torch.linalg.norm(new_weight_v,dim=1)).unsqueeze(1)) * (self.weight_v + (self.lora_A.T @ self.lora_B.T).T * self.scaling)
-
-        return nn.functional.linear(input, weight, self.bias)
-
-    def extra_repr(self) -> str:
-        return 'in_features={}, out_features={}, bias={}, lora_dim={}, lora_scale={}'.format(
-            self.in_features, self.out_features, self.bias is not None, self.lora.r, self.scaling
-        )
-
 class TrainerBase(object):
     def __init__(self, args, train_loader=None, val_loader=None, test_loader=None, train=True):
         self.args = args
@@ -342,7 +250,7 @@ class TrainerBase(object):
 
         if self.args.use_dora:
             print("apply dora tuning")
-            
+
             # unfreeze language model anyway to mimic the full fine-tuning setting
             targets = ["lm_head", "shared"]
             for n, p in self.model.named_parameters():
