@@ -491,6 +491,7 @@ class TrainerBase(object):
                 target_modules=["v_proj", "q_proj"],
                 lora_alpha=self.args.lora_dim,
                 bias="all",
+                use_dora=True,
             )
             self.model = get_peft_model(self.model, peft_config)
 
