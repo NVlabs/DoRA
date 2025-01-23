@@ -499,9 +499,9 @@ class Trainer(TrainerBase):
         if 'vqa' in self.args.tasks:
             # VQA
             vqa_test_loader = self.test_loader['vqa']
+            dump_path = os.path.join(self.args.output, 'karpathy_test_predict.json')
             quesid2ans = self.vqa_predict(vqa_test_loader, dump_path)
             if self.args.gpu == 0:
-                dump_path = os.path.join(self.args.output, 'karpathy_test_predict.json')
                 wandb.save(dump_path, base_path=self.args.output)
                 evaluator = vqa_test_loader.evaluator
                 acc_dict_all = evaluator.evaluate_raw(quesid2ans)
@@ -512,18 +512,19 @@ class Trainer(TrainerBase):
                 wandb_log_dict['VQA/Test/topk_optimal'] = acc_dict_answerable['overall']
                 wandb_log_dict['VQA/Test/topk_not_optimal'] = acc_dict_unanswerable['overall']
 
-                if self.test_loader.get("vqa_submit", None):
-                    vqa_submit_test_loader = self.test_loader['vqa_submit']
-                    dump_path = os.path.join(self.args.output, 'vqa_submit.json')
-                    self.vqa_predict(vqa_submit_test_loader, dump_path=dump_path)
+            if self.test_loader.get("vqa_submit", None):
+                vqa_submit_test_loader = self.test_loader['vqa_submit']
+                dump_path = os.path.join(self.args.output, 'vqa_submit.json')
+                self.vqa_predict(vqa_submit_test_loader, dump_path=dump_path)
+                if self.args.gpu == 0:
                     wandb.save(dump_path, base_path=self.args.output)
 
         if 'nlvr' in self.args.tasks:
             # NLVR
             nlvr_test_loader = self.test_loader['nlvr']
+            dump_path = os.path.join(self.args.output, 'nlvr_submit.csv')
             test_score_dict = self.nlvr_evaluate(nlvr_test_loader, dump_path=dump_path)
             if self.args.gpu == 0:
-                dump_path = os.path.join(self.args.output, 'nlvr_submit.csv')
                 wandb.save(dump_path, base_path=self.args.output)
                 for score_name, score in test_score_dict.items():
                     wandb_log_dict[f'NLVR/Test/{score_name}'] = score * 100.
@@ -554,9 +555,9 @@ class Trainer(TrainerBase):
             mmt_test2018_loader = self.test_loader['mmt_test2018']
             for loader in [mmt_test2016_loader, mmt_test2017_loader, mmt_test2018_loader]:
                 split = loader.dataset.source
+                dump_path = os.path.join(self.args.output, f'submit_{split}_raw.txt')
                 test_results = self.mmt_evaluate(loader, dump_path=dump_path)
                 if self.args.gpu == 0:
-                    dump_path = os.path.join(self.args.output, f'submit_{split}_raw.txt')
                     for score_name, score in test_results.items():
                         wandb_log_dict[f'MMT/{split}/{score_name}'] = score
                     log_str += f'{split} set results\n'
