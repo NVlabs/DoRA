@@ -340,6 +340,30 @@ class TrainerBase(object):
 
     def unfreeze_parameters(self):       
 
+        if self.args.use_dora:
+            print("apply dora tuning")
+            
+            # unfreeze language model anyway to mimic the full fine-tuning setting
+            targets = ["lm_head", "shared"]
+            for n, p in self.model.named_parameters():
+                if any(t in n for t in targets):
+                    p.requires_grad = True
+                    print(f"{n} is trainable...")
+            for name, sub_module in self.model.named_modules():
+                if isinstance(sub_module, (modeling_bart.JointEncoder, modeling_bart.BartDecoder, modeling_t5.T5Stack, modeling_t5.JointEncoder)):
+                    # if len(name.split(".")) < 7: # this will not consider layer norms inside adapters then.
+                    for param_name, param in sub_module.named_parameters():
+                        print(f"{param_name} is trainable...")
+                        param.requires_grad = True
+            
+            peft_config = LoraConfig(
+                r=self.args.lora_dim,
+                target_modules=["v_proj", "q_proj"],
+                lora_alpha=self.args.lora_dim,
+                bias="all",
+                use_dora=True,
+            )
+            self.model = get_peft_model(self.model, peft_config)
 
         targets = ["visual_embedding"]
         # unfreeze the parameters in targets anyway
@@ -468,32 +492,6 @@ class TrainerBase(object):
                     print(f"{name} is trainable...")
                     for param_name, param in sub_module.named_parameters():
                         param.requires_grad = True
-
-        if self.args.use_dora:
-            print("apply dora tuning")
-
-            if not self.args.unfreeze_language_model:
-                # unfreeze language model anyway to mimic the full fine-tuning setting
-                targets = ["lm_head", "shared"]
-                for n, p in self.model.named_parameters():
-                    if any(t in n for t in targets):
-                        p.requires_grad = True
-                        print(f"{n} is trainable...")
-                for name, sub_module in self.model.named_modules():
-                    if isinstance(sub_module, (modeling_bart.JointEncoder, modeling_bart.BartDecoder, modeling_t5.T5Stack, modeling_t5.JointEncoder)):
-                        # if len(name.split(".")) < 7: # this will not consider layer norms inside adapters then.
-                        for param_name, param in sub_module.named_parameters():
-                            print(f"{param_name} is trainable...")
-                            param.requires_grad = True
-            
-            peft_config = LoraConfig(
-                r=self.args.lora_dim,
-                target_modules=["v_proj", "q_proj"],
-                lora_alpha=self.args.lora_dim,
-                bias="all",
-                use_dora=True,
-            )
-            self.model = get_peft_model(self.model, peft_config)
 
             
     def create_tokenizer(self, **kwargs):
