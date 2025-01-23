@@ -1,15 +1,9 @@
 
-import math
 import random
-from dataclasses import dataclass
 
 from transformers.models.bart.modeling_bart import (
-    BartLearnedPositionalEmbedding,
-    BartEncoderLayer,
-    BartPretrainedModel,
     BartConfig,
-    ACT2FN,
-    shift_tokens_right, _make_causal_mask, _expand_mask
+    shift_tokens_right
 )
 
 from my_transformers.modeling_bart import BartModel, BartForConditionalGeneration, BartDecoder, BartEncoder
@@ -20,32 +14,27 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import CrossEntropyLoss
 
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
-import copy
+from typing import Any, Dict, Optional, Tuple
 
-from transformers.modeling_outputs import ModelOutput, BaseModelOutput, BaseModelOutputWithPast, BaseModelOutputWithPastAndCrossAttentions, Seq2SeqLMOutput, Seq2SeqModelOutput
-from transformers.modeling_utils import PreTrainedModel, find_pruneable_heads_and_indices, prune_linear_layer
+from transformers.modeling_outputs import ModelOutput, BaseModelOutput, Seq2SeqLMOutput, Seq2SeqModelOutput
 from transformers.utils import logging
-from transformers import BeamScorer, BeamSearchScorer
+
 
 logger = logging.get_logger(__name__)
 
 
-def _make_causal_mask(input_ids_shape: torch.Size, prefix_len: int, dtype: torch.dtype, past_key_values_length: int = 0):
+def _expand_mask(mask: torch.Tensor, dtype: torch.dtype, tgt_len: Optional[int] = None):
     """
-    Make causal mask used for bi-directional self-attention.
+    Expands attention_mask from `[bsz, seq_len]` to `[bsz, 1, tgt_seq_len, src_seq_len]`.
     """
-    bsz, tgt_len = input_ids_shape
-    tgt_len = tgt_len + prefix_len
-    mask = torch.full((tgt_len, tgt_len), float("-inf"))
-    mask_cond = torch.arange(mask.size(-1))
-    mask.masked_fill_(mask_cond < (mask_cond + 1).view(mask.size(-1), 1), 0)
-    mask = mask.to(dtype)
+    bsz, src_len = mask.size()
+    tgt_len = tgt_len if tgt_len is not None else src_len
 
-    if past_key_values_length > 0:
-        mask = torch.cat([torch.zeros(tgt_len, past_key_values_length, dtype=dtype), mask], dim=-1)
-    return mask[None, None, :, :].expand(bsz, 1, tgt_len, tgt_len + past_key_values_length)
+    expanded_mask = mask[:, None, None, :].expand(bsz, 1, tgt_len, src_len).to(dtype)
 
+    inverted_mask = 1.0 - expanded_mask
+
+    return inverted_mask.masked_fill(inverted_mask.bool(), torch.finfo(dtype).min)
 
 class JointEncoder(BartEncoder):
     """
@@ -572,69 +561,3 @@ class VLBart(BartForConditionalGeneration):
 
         return input_ids, model_kwargs
 
-
-if __name__ == "__main__":
-    import transformers
-
-    config = transformers.AutoConfig.from_pretrained("facebook/bart-base")
-
-    config.feat_dim = 2048
-    config.pos_dim = 4
-    config.n_images = 2
-
-    config.use_vis_order_embedding = True
-    config.additional_visual_embedding_layers = 0
-    config.preseqlen = 2
-    config.decoder_preseqlen = 2
-
-    config.dropout_rate = 0.1
-    config.dropout = 0.1
-    config.attention_dropout = 0.1
-    config.activation_dropout = 0.1
-
-    config.use_vis_layer_norm = True
-    config.individual_vis_layer_norm = True
-    config.losses = 'lm,obj,attr,feat'
-
-    config.share_vis_lang_layer_norm = False
-    config.classifier = False
-
-    tokenizer = transformers.AutoTokenizer.from_pretrained("facebook/bart-base")
-
-    num_added_toks = 0
-    additional_special_tokens = [f'<extra_id_{i}>' for i in range(100-1, -1, -1)] + \
-            [f'<vis_extra_id_{i}>' for i in range(100-1, -1, -1)]
-    special_tokens_dict = {'additional_special_tokens': additional_special_tokens}
-    num_added_toks = tokenizer.add_special_tokens(special_tokens_dict)
-
-    config.default_obj_order_ids = tokenizer.convert_tokens_to_ids([f'<vis_extra_id_{i}>' for i in range(100)])
-
-    model = VLBart.from_pretrained("facebook/bart-base", config=config)
-    model.resize_token_embeddings(model.model.shared.num_embeddings + num_added_toks)
-    model.tokenizer = tokenizer
-
-    inputs = tokenizer("Hello, my dog is cute and ", return_tensors="pt")
-    
-    vis_feats = torch.randn(1, 36, 2048)
-    vis_pos = torch.randn(1, 36, 4)
-
-    generation_output = model.generate(
-                **inputs,
-                vis_inputs=(vis_feats, vis_pos)
-    )
-    
-    print(generation_output)
-
-    print(tokenizer.batch_decode(generation_output, skip_special_tokens=True))
-
-    vis_feats = torch.randn(1, 36, 2048)
-    vis_pos = torch.randn(1, 36, 4)
-
-    generation_output = model.generate(
-                **inputs,
-                vis_inputs=(vis_feats, vis_pos),
-    )
-    
-    print(generation_output)
-
-    print(tokenizer.batch_decode(generation_output, skip_special_tokens=True))
