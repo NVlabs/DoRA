@@ -1,9 +1,17 @@
 import re
 import numpy as np
 import torch
-import torch.distributed as dist
 import collections
 import logging
+import builtins
+
+
+def path_print(local_rank):
+    original_print = builtins.print
+    def custom_print(*args, **kwargs):
+        if local_rank <= 0:
+            original_print(*args, **kwargs)
+    builtins.print = custom_print
 
 def get_area(pos):
     """

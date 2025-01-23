@@ -29,7 +29,7 @@ from torch.cuda.amp import autocast
 from torch.nn.parallel import DistributedDataParallel as DDP
 from tqdm import tqdm
 from trainer_base import TrainerBase
-from utils import LossMeter, set_global_logging_level
+from utils import LossMeter, set_global_logging_level, path_print
 from multitask_model import VLBartMultiTask, VLT5MultiTask
 from vis_encoder import get_vis_encoder
 
@@ -1406,6 +1406,7 @@ if __name__ == "__main__":
     args = parse_args()
     ngpus_per_node = torch.cuda.device_count()
     args.world_size = ngpus_per_node
+    path_print(args.local_rank)
     if args.local_rank in [0, -1]:
         print(args)
 
